@@ -276,10 +276,10 @@ export default function PortfolioPage() {
                     <a
                       key={item.href}
                       href={item.href}
-                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-md"
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition-colors"
                       onClick={(e) => {
-                        setIsMenuOpen(false);
                         handleScroll(e);
+                        setIsMenuOpen(false);
                       }}
                     >
                       {item.label}
@@ -293,7 +293,7 @@ export default function PortfolioPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-24 md:py-32 mt-16">
+      <section className="container mx-auto px-4 py-16 sm:py-20 md:py-24 lg:py-32 mt-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -305,7 +305,7 @@ export default function PortfolioPage() {
           className="max-w-3xl mx-auto text-center"
         >
           <motion.h1 
-            className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -320,7 +320,7 @@ export default function PortfolioPage() {
             </motion.span>
           </motion.h1>
           <motion.p 
-            className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8"
+            className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-6 sm:mb-8 px-4"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
@@ -328,7 +328,7 @@ export default function PortfolioPage() {
             Full Stack Developer specializing in modern web technologies
           </motion.p>
           <motion.div 
-            className="flex flex-wrap justify-center gap-4"
+            className="flex flex-wrap justify-center gap-3 sm:gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
@@ -430,7 +430,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-900">
+      <section id="projects" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -438,10 +438,10 @@ export default function PortfolioPage() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
               Featured Projects
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {projects.map((project, index) => (
                 <motion.div
                   key={index}
@@ -449,39 +449,39 @@ export default function PortfolioPage() {
                   transition={{ duration: 0.2 }}
                 >
                   <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden h-full flex flex-col">
-                    <div className="h-48 relative">
+                    <div className="h-48 sm:h-56 relative">
                       <Image
                         src={project.image}
                         alt={project.title}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     </div>
-                    <div className="p-6 flex-grow">
-                      <h3 className="text-xl font-bold mb-2">
+                    <div className="p-4 sm:p-6 flex-grow">
+                      <h3 className="text-lg sm:text-xl font-bold mb-2">
                         {project.title}
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4">
                         {project.description}
                       </p>
-                      <div className="flex flex-wrap gap-2 mb-4">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4">
                         {project.tags.map((tag, tagIndex) => (
                           <span
                             key={tagIndex}
-                            className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-md"
+                            className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs sm:text-sm rounded-md"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
                     </div>
-                    <div className="px-6 pb-6 flex gap-4">
+                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 flex gap-3 sm:gap-4">
                       <a
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+                        className="text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
                       >
                         <Github size={16} />
                         <span>Code</span>
@@ -490,7 +490,7 @@ export default function PortfolioPage() {
                         href={project.demo}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+                        className="text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
                       >
                         <ExternalLink size={16} />
                         <span>Demo</span>
@@ -500,10 +500,10 @@ export default function PortfolioPage() {
                 </motion.div>
               ))}
             </div>
-            <div className="text-center mt-10">
+            <div className="text-center mt-8 sm:mt-10">
               <a
                 href="/projects"
-                className="px-4 py-2 flex items-center justify-center mx-auto w-max bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+                className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors text-sm sm:text-base"
               >
                 View All Projects <ArrowRight className="ml-2 h-4 w-4" />
               </a>
@@ -715,7 +715,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-900">
+      <section id="contact" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -724,12 +724,12 @@ export default function PortfolioPage() {
             viewport={{ once: true }}
             className="max-w-3xl mx-auto"
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
               Get In Touch
             </h2>
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
-              <form onSubmit={handleFormSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
+              <form onSubmit={handleFormSubmit} className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label
                       htmlFor="name"
@@ -744,7 +744,7 @@ export default function PortfolioPage() {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                       placeholder="Your name"
                     />
                   </div>
@@ -762,7 +762,7 @@ export default function PortfolioPage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                       placeholder="your.email@example.com"
                     />
                   </div>
@@ -781,7 +781,7 @@ export default function PortfolioPage() {
                     onChange={handleInputChange}
                     required
                     rows={5}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                     placeholder="Your message here..."
                   ></textarea>
                 </div>
@@ -789,7 +789,7 @@ export default function PortfolioPage() {
                   <button
                     type="submit"
                     disabled={formStatus === "loading"}
-                    className={`w-full px-4 py-2 text-white rounded-md transition-colors ${
+                    className={`w-full px-4 py-2 text-sm sm:text-base text-white rounded-md transition-colors ${
                       formStatus === "loading"
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-blue-600 hover:bg-blue-700"
@@ -798,12 +798,12 @@ export default function PortfolioPage() {
                     {formStatus === "loading" ? "Sending..." : "Send Message"}
                   </button>
                   {formStatus === "success" && (
-                    <p className="mt-2 text-green-600 dark:text-green-400 text-center">
+                    <p className="mt-2 text-sm sm:text-base text-green-600 dark:text-green-400 text-center">
                       Message sent successfully!
                     </p>
                   )}
                   {formStatus === "error" && (
-                    <p className="mt-2 text-red-600 dark:text-red-400 text-center">
+                    <p className="mt-2 text-sm sm:text-base text-red-600 dark:text-red-400 text-center">
                       Failed to send message. Please try again.
                     </p>
                   )}
@@ -817,7 +817,7 @@ export default function PortfolioPage() {
       {/* Social Media Section */}
       <section
         id="social"
-        className="py-16 bg-gradient-to-b from-blue-600 to-purple-600 text-white"
+        className="py-12 sm:py-16 bg-gradient-to-b from-blue-600 to-purple-600 text-white"
       >
         <div className="container mx-auto px-4">
           <motion.div
@@ -828,7 +828,7 @@ export default function PortfolioPage() {
             className="text-center"
           >
             <motion.h2 
-              className="text-3xl font-bold mb-8"
+              className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8"
               initial={{ y: 20, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -837,25 +837,24 @@ export default function PortfolioPage() {
               Connect With Me
             </motion.h2>
             <motion.div 
-              className="flex justify-center gap-6 mb-8"
+              className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 sm:mb-8"
               initial={{ scale: 0.8, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
               {[
-                { icon: <Github size={24} />, href: "https://github.com/amar2502" },
-                { icon: <Linkedin size={24} />, href: "https://www.linkedin.com/in/amar-pandey-486ab6337/" },
-                { icon: <Twitter size={24} />, href: "https://x.com/amarpandey2502" },
-                { icon: <Instagram size={24} />, href: "https://instagram.com/amarpandey2502" },
-                { icon: <Mail size={24} />, href: "mailto:amarpandey2502@gmail.com" }
+                { icon: <Github size={20} className="sm:w-6 sm:h-6" />, href: "https://github.com/amar2502" },
+                { icon: <Linkedin size={20} className="sm:w-6 sm:h-6" />, href: "https://www.linkedin.com/in/amar-pandey-486ab6337/" },
+                { icon: <Twitter size={20} className="sm:w-6 sm:h-6" />, href: "https://x.com/amarpandey2502" },
+                { icon: <Instagram size={20} className="sm:w-6 sm:h-6" />, href: "https://instagram.com/amarpandey2502" }
               ].map((social, index) => (
                 <motion.a
                   key={index}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white text-gray-900 p-4 rounded-full hover:scale-110 transition-transform"
+                  className="bg-white text-gray-900 p-3 sm:p-4 rounded-full hover:scale-110 transition-transform"
                   whileHover={{ 
                     y: -5, 
                     scale: 1.2,
@@ -870,7 +869,7 @@ export default function PortfolioPage() {
               ))}
             </motion.div>
             <motion.p 
-              className="text-xl"
+              className="text-base sm:text-lg md:text-xl"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
@@ -884,7 +883,7 @@ export default function PortfolioPage() {
 
       {/* Footer */}
       <motion.footer 
-        className="py-6 bg-gray-900/95 backdrop-blur-sm text-gray-400 text-center text-sm border-t border-gray-800"
+        className="py-4 sm:py-6 bg-gray-900/95 backdrop-blur-sm text-gray-400 text-center text-xs sm:text-sm border-t border-gray-800"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -892,13 +891,13 @@ export default function PortfolioPage() {
       >
         <div className="container mx-auto px-4">
           <motion.div 
-            className="flex items-center justify-center space-x-2"
+            className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
             <span>©{new Date().getFullYear()}</span>
             <span className="font-medium text-gray-300">Amar Pandey</span>
-            <span className="text-gray-500">•</span>
+            <span className="text-gray-500 hidden sm:inline">•</span>
             <span>Made with</span>
             <motion.span 
               className="text-red-500"
