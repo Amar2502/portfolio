@@ -1,552 +1,644 @@
-// app/page.js
+// File: app/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  Moon,
-  Sun,
-  Github,
-  Twitter,
-  Linkedin,
-  Mail,
-  ArrowRight,
-  Download,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Github, Linkedin, Twitter, Mail, Menu, X, ExternalLink, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import Image from "next/image";
 
-export default function Home() {
-  const [theme, setTheme] = useState("light");
+export default function PortfolioPage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   useEffect(() => {
-    const handleNavLinkClick = (e: MouseEvent) => {
-      const target = e.target as HTMLAnchorElement;
-      if (!target || !target.matches('a[href^="#"]')) return; // Ensure it's a valid anchor link
-
-      const targetId = target.getAttribute("href");
-      if (!targetId || targetId === "#") return;
-
-      const targetElement = document.querySelector<HTMLElement>(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        window.scrollTo({
-          top: targetElement.offsetTop - 80, // Adjust for fixed headers
-          behavior: "smooth",
-        });
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
       }
     };
 
-    // Attach event listener to the document (event delegation)
-    document.addEventListener("click", handleNavLinkClick);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrolled]);
 
-    // Cleanup event listener on unmount
-    return () => {
-      document.removeEventListener("click", handleNavLinkClick);
-    };
-  }, []);
+  // Navigation items
+  const navItems = [
+    { href: "#about", label: "About" },
+    { href: "#projects", label: "Projects" },
+    { href: "#github", label: "GitHub" },
+    { href: "#blog", label: "Blog" },
+    { href: "#contact", label: "Contact" },
+  ];
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.classList.toggle("dark");
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    const href = e.currentTarget.href;
+    const targetId = href.replace(/.*\#/, "");
+    const elem = document.getElementById(targetId);
+    elem?.scrollIntoView({
+      behavior: "smooth"
+    });
+  };
+
+  // Project data
+  const projects = [
+    {
+      title: "CodeShare",
+      description: "A real-time code sharing platform with syntax highlighting and website sharing feature with just a single click without any hosting knowledge required.",
+      tags: ["Nextjs", "React", "MongoDB", "Tailwindcss", "Shadcn"],
+      github: "https://github.com/Amar2502/codeshare",
+      demo: "https://codeshare.space",
+      image: "/codeshare.png"
+    },
+    {
+      title: "Library Management System",
+      description: "A comprehensive library management solution with features for book tracking, user management, admin dashboard, and more.",
+      tags: ["React.js", "JavaScript", "Node.js", "Express.js", "MongoDB", "Tailwindcss"],
+      github: "https://github.com/Amar2502/Library_Management",
+      demo: "https://amarpandey.in/librarymanagement",
+      image: "/libraryManagement.png"
+    },
+    {
+      title: "Interactive Quiz App",
+      description: "A dynamic quiz application with real-time scoring, leaderboards, and customizable question sets for engaging learning experiences.",
+      tags: ["React", "Tailwind CSS"],
+      github: "https://github.com/Amar2502/Quiz_App",
+      demo: "https://amarpandey.in/quizapp",
+      image: "/QuizApp.png"
+    }
+  ];
+
+  // Blog data
+  const blogs = [
+    {
+      title: "Understanding React Hooks",
+      excerpt: "A deep dive into React's Hooks API and how it changed the way we write components.",
+      date: "March 1, 2025",
+      tags: ["React", "JavaScript", "Web Development"],
+      slug: "/blog/understanding-react-hooks"
+    },
+    {
+      title: "Building with Next.js 14",
+      excerpt: "Exploring the new features and improvements in Next.js 14 and how to leverage them.",
+      date: "February 15, 2025",
+      tags: ["Next.js", "React", "Server Components"],
+      slug: "/blog/building-with-nextjs-14"
+    },
+    {
+      title: "Mastering Tailwind CSS",
+      excerpt: "Tips and tricks for getting the most out of Tailwind CSS in your projects.",
+      date: "January 28, 2025",
+      tags: ["CSS", "Tailwind", "Design"],
+      slug: "/blog/mastering-tailwind-css"
+    }
+  ];
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus('loading');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error('Failed to send message');
+      
+      setFormStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      
+      setTimeout(() => {
+        setFormStatus('idle');
+      }, 3000);
+    } catch (error) {
+      setFormStatus('error');
+      setTimeout(() => {
+        setFormStatus('idle');
+      }, 3000);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   return (
-    <div className={`min-h-screen ${theme === "dark" ? "dark" : ""}`}>
-      <div className="px-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50 transition-colors duration-300">
-        {/* Header */}
-        <header className="sticky top-0 z-40 w-full border-b bg-white/95 dark:bg-slate-900/95 backdrop-blur supports-backdrop-blur:bg-white/60 dark:border-slate-800">
-          <div className="container flex h-16 items-center justify-between">
-            <div className="font-bold text-xl">Amar Pandey</div>
-            <nav className="hidden md:flex gap-6">
-              <a
-                href="#about"
-                className="hover:text-slate-600 dark:hover:text-slate-300"
-              >
-                About
-              </a>
-              <a
-                href="#projects"
-                className="hover:text-slate-600 dark:hover:text-slate-300"
-              >
-                Projects
-              </a>
-              <a
-                href="#skills"
-                className="hover:text-slate-600 dark:hover:text-slate-300"
-              >
-                Skills
-              </a>
-              <a
-                href="#contact"
-                className="hover:text-slate-600 dark:hover:text-slate-300"
-              >
-                Contact
-              </a>
-            </nav>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                {theme === "light" ? (
-                  <Moon className="h-5 w-5" />
-                ) : (
-                  <Sun className="h-5 w-5" />
-                )}
-              </Button>
-              <Button>Contact Me</Button>
-            </div>
-          </div>
-        </header>
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
+      {/* Navigation */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md"
+            : "bg-transparent"
+        }`}
+      >
+        <nav className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <a
+              href="#"
+              className="text-2xl font-bold text-blue-600 dark:text-blue-400"
+            >
+              YourName
+            </a>
 
-        {/* Hero Section */}
-        <section className="container py-24 md:py-32 space-y-8">
-          <div className="flex flex-col md:flex-row gap-8 items-center">
-            <div className="w-full md:w-2/3 space-y-4">
-              <Badge
-                variant="outline"
-                className="px-3 py-1 text-sm rounded-full border border-violet-200 dark:border-violet-800 bg-violet-50 dark:bg-violet-950/50 text-violet-900 dark:text-violet-300"
-              >
-                Computer Engineering Student
-              </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold">
-                Hi, I'm Amar Pandey
-                <br />
-                <span className="text-violet-600 dark:text-violet-400">
-                  Aspiring Developer
-                </span>
-              </h1>
-              <p className="text-xl text-slate-600 dark:text-slate-400 max-w-xl">
-                Second-year Computer Engineering student passionate about
-                building web applications with modern technologies.
-              </p>
-              <div className="flex gap-4 pt-4">
-                <Button variant="outline" className="gap-2">
-                  Download Resume <Download className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-            <div className="w-full md:w-1/3 flex justify-center">
-              <Avatar className="h-64 w-64 border-4 border-violet-200 dark:border-violet-800">
-                <AvatarImage src="/api/placeholder/400/400" alt="Profile" />
-                <AvatarFallback>AP</AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section
-          id="about"
-          className="bg-slate-50 dark:bg-slate-800/50 py-20 px-5"
-        >
-          <div className="container space-y-12">
-            <div className="space-y-2 text-center">
-              <h2 className="text-3xl font-bold">About Me</h2>
-              <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                A passionate student exploring the world of web development
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold">My Journey</h3>
-                <p className="text-slate-600 dark:text-slate-400">
-                  I'm currently in my second year of Computer Engineering. What
-                  started as curiosity has evolved into a dedicated pursuit of
-                  creating functional solutions.
-                </p>
-                <p className="text-slate-600 dark:text-slate-400">
-                  I've completed several projects during my learning journey,
-                  including 2 full-stack applications and various smaller React
-                  projects. I'm constantly exploring new technologies and
-                  improving my skills through hands-on projects and online
-                  courses.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <Card>
-                  <CardContent className="p-6 space-y-2">
-                    <div className="text-4xl font-bold text-violet-600 dark:text-violet-400">
-                      2
-                    </div>
-                    <div className="font-medium">Full-Stack Projects</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="p-6 space-y-2">
-                    <div className="text-4xl font-bold text-violet-600 dark:text-violet-400">
-                      5+
-                    </div>
-                    <div className="font-medium">React Projects</div>
-                  </CardContent>
-                </Card>
-                <Card className="col-span-2">
-                  <CardContent className="p-6 space-y-2">
-                    <div className="text-4xl font-bold text-violet-600 dark:text-violet-400">
-                      2nd
-                    </div>
-                    <div className="font-medium">
-                      Year Computer Engineering Student
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Projects Section */}
-        <section id="projects" className="py-20">
-          <div className="container space-y-12">
-            <div className="space-y-2 text-center">
-              <h2 className="text-3xl font-bold">My Projects</h2>
-              <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                A collection of my learning projects and academic work
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <Card key={item} className="overflow-hidden group">
-                  <div className="relative aspect-video bg-slate-100 dark:bg-slate-800">
-                    <img
-                      src={`/api/placeholder/400/300`}
-                      alt={`Project ${item}`}
-                      className="object-cover w-full h-full"
-                    />
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                      <Button size="sm" variant="secondary" className="h-8">
-                        View Project
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="h-8 bg-transparent text-white border-white hover:bg-white/20"
-                      >
-                        <Github className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  <CardContent className="p-4">
-                    <div className="mb-1 flex items-center gap-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {item <= 2 ? "Full-Stack" : "React"}
-                      </Badge>
-                      <Badge variant="secondary" className="text-xs">
-                        {item <= 2 ? "MERN" : "Frontend"}
-                      </Badge>
-                    </div>
-                    <h3 className="font-semibold text-lg">Project {item}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
-                      {item <= 2
-                        ? "A complete web application with frontend and backend components."
-                        : "A React-based interface with responsive design and modern features."}
-                    </p>
-                  </CardContent>
-                </Card>
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-1">
+              {navItems.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-md transition-colors"
+                  onClick={handleScroll}
+                >
+                  {item.label}
+                </a>
               ))}
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-md"
+              >
+                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+            </div>
+
+            {/* Mobile Navigation Toggle */}
+            <div className="flex items-center md:hidden space-x-2">
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-md"
+              >
+                {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </button>
+              <button
+                className="p-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-md"
+                onClick={toggleMenu}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
-        </section>
 
-        {/* Skills Section */}
-        <section id="skills" className="bg-slate-50 dark:bg-slate-800/50 py-20">
-          <div className="container space-y-12">
-            <div className="space-y-2 text-center">
-              <h2 className="text-3xl font-bold">My Skills</h2>
-              <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                Technologies and tools I'm currently learning and using in my
-                projects
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card>
-                <CardContent className="p-6 space-y-4">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+          {/* Mobile Navigation Menu */}
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                className="md:hidden mt-4"
+              >
+                <div className="flex flex-col space-y-2 py-4">
+                  {navItems.map((item) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-md"
+                      onClick={(e) => {
+                        setIsMenuOpen(false);
+                        handleScroll(e);
+                      }}
                     >
-                      <path d="m4 6 8-4 8 4" />
-                      <path d="m18 10 4 2v6l-4 2" />
-                      <path d="m2 10 4 2v6l-4 2" />
-                      <path d="m10 12 4 2v6l-4 2" />
-                      <path d="m10 12 4-2" />
-                      <path d="m14 14 4-2" />
-                      <path d="m6 14 4-2" />
-                      <path d="m18 18v-6" />
-                      <path d="m6 18v-6" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold">Frontend Development</h3>
-                    <p className="text-slate-600 dark:text-slate-400 mt-2">
-                      Building responsive user interfaces with modern
-                      frameworks.
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      "React",
-                      "Next.js",
-                      "HTML/CSS",
-                      "JavaScript",
-                      "Tailwind CSS",
-                    ].map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="outline"
-                        className="justify-center"
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </nav>
+      </header>
 
-              <Card>
-                <CardContent className="p-6 space-y-4">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-300">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M4 10c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2" />
-                      <path d="M10 16c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2" />
-                      <path d="M16 22c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2v4c0 1.1-.9 2-2 2h-4Z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold">Backend Development</h3>
-                    <p className="text-slate-600 dark:text-slate-400 mt-2">
-                      Creating APIs and server-side applications.
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      "Node.js",
-                      "Express",
-                      "MongoDB",
-                      "REST API",
-                      "Firebase",
-                    ].map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="outline"
-                        className="justify-center"
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section
-          id="contact"
-          className="bg-slate-50 dark:bg-slate-800/50 py-20"
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-24 md:py-32 mt-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mx-auto text-center"
         >
-          <div className="container space-y-12">
-            <div className="space-y-2 text-center">
-              <h2 className="text-3xl font-bold">Get In Touch</h2>
-              <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                Interested in collaborating on a project or just want to say hi?
-                Feel free to reach out!
-              </p>
-            </div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            Hi, I'm <span className="text-black dark:text-white">Your Name</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-8">
+            Full Stack Developer specializing in modern web technologies
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a 
+              href="#projects" 
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+            >
+              View Projects
+            </a>
+            <a 
+              href="#contact" 
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-md transition-colors"
+            >
+              Contact Me
+            </a>
+          </div>
+        </motion.div>
+      </section>
 
-            <div className="grid md:grid-cols-2 gap-12">
-              <Card>
-                <CardContent className="p-6">
-                  <form className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label htmlFor="name" className="text-sm font-medium">
-                          Name
-                        </label>
-                        <input
-                          id="name"
-                          placeholder="Your name"
-                          className="w-full px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium">
-                          Email
-                        </label>
-                        <input
-                          id="email"
-                          type="email"
-                          placeholder="Your email"
-                          className="w-full px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="subject" className="text-sm font-medium">
-                        Subject
-                      </label>
-                      <input
-                        id="subject"
-                        placeholder="What's this about?"
-                        className="w-full px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
+      {/* About Me Section */}
+      <section id="about" className="py-20 bg-white dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto"
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">About Me</h2>
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="relative bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden aspect-square">
+                <Image
+                  src="/amar.jpg"
+                  alt="Amar Pandey"
+                  fill
+                  className="object-cover object-[-100px_center]"
+                  priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              <div>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                  I'm a passionate developer with expertise in building modern web applications. 
+                  I enjoy solving complex problems and creating intuitive user experiences.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">
+                  With a background in computer science and several years of industry experience,
+                  I bring a unique perspective to every project I work on.
+                </p>
+                <div className="flex gap-4">
+                  <a 
+                    href="/resume.pdf" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-md transition-colors"
+                  >
+                    Download Resume
+                  </a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section id="projects" className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">Featured Projects</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden h-full flex flex-col">
+                    <div className="h-48 relative">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <label htmlFor="message" className="text-sm font-medium">
-                        Message
-                      </label>
-                      <textarea
-                        id="message"
-                        placeholder="Your message here..."
-                        rows={5}
-                        className="w-full px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
-                      ></textarea>
-                    </div>
-                    <Button className="w-full">Send Message</Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-xl font-bold mb-4">
-                    Contact Information
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center text-violet-600 dark:text-violet-300">
-                        <Mail className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <div className="text-sm text-slate-500 dark:text-slate-400">
-                          Email
-                        </div>
-                        <div>amarpandey2502@gmail.com</div>
+                    <div className="p-6 flex-grow">
+                      <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">{project.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tags.map((tag, tagIndex) => (
+                          <span 
+                            key={tagIndex} 
+                            className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-md"
+                          >
+                            {tag}
+                          </span>
+                        ))}
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center text-violet-600 dark:text-violet-300">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                          <circle cx="12" cy="10" r="3" />
-                        </svg>
-                      </div>
-                      <div>
-                        <div className="text-sm text-slate-500 dark:text-slate-400">
-                          University
-                        </div>
-                        <div>Computer Engineering Department</div>
-                      </div>
+                    <div className="px-6 pb-6 flex gap-4">
+                      <a 
+                        href={project.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+                      >
+                        <Github size={16} />
+                        <span>Code</span>
+                      </a>
+                      <a 
+                        href={project.demo} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+                      >
+                        <ExternalLink size={16} />
+                        <span>Demo</span>
+                      </a>
                     </div>
                   </div>
-                </div>
+                </motion.div>
+              ))}
+            </div>
+            <div className="text-center mt-10">
+              <a 
+                href="/projects" 
+                className="px-4 py-2 flex items-center justify-center mx-auto w-max bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+              >
+                View All Projects <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
-                <div>
-                  <h3 className="text-xl font-bold mb-4">Connect With Me</h3>
-                  <div className="flex gap-4">
-                    <a
-                      href="https://github.com/Amar2502"
-                      className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-violet-100 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-300 transition-colors"
-                    >
-                      <Github className="h-5 w-5" />
-                    </a>
-                    <a
-                      href="https://x.com/amarpandey2502"
-                      className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-violet-100 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-300 transition-colors"
-                    >
-                      <Twitter className="h-5 w-5" />
-                    </a>
-                    <a
-                      href="https://linkedin.com/in/amar-pandey-486ab6337/"
-                      className="h-10 w-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-violet-100 dark:hover:bg-violet-900/30 hover:text-violet-600 dark:hover:text-violet-300 transition-colors"
-                    >
-                      <Linkedin className="h-5 w-5" />
-                    </a>
+      {/* GitHub Section */}
+      <section id="github" className="py-20 bg-white dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto"
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">GitHub Contributions</h2>
+            <div className="bg-gray-100 dark:bg-gray-700 p-8 rounded-lg">
+              <div className="flex justify-between items-center mb-6">
+                <div className="flex items-center">
+                  <Github className="mr-2" />
+                  <span className="font-semibold">github.com/yourusername</span>
+                </div>
+                <a
+                  href="https://github.com/yourusername"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-md transition-colors"
+                >
+                  View Profile
+                </a>
+              </div>
+              <div className="grid grid-cols-7 gap-2">
+                {Array(52).fill(0).map((_, i) => (
+                  <div key={i} className="grid grid-rows-7 gap-1">
+                    {Array(7).fill(0).map((_, j) => {
+                      // Random contribution level (0-4)
+                      const level = Math.floor(Math.random() * 5);
+                      const colors = [
+                        "bg-gray-200 dark:bg-gray-600",
+                        "bg-green-100 dark:bg-green-900",
+                        "bg-green-300 dark:bg-green-700",
+                        "bg-green-500 dark:bg-green-500",
+                        "bg-green-700 dark:bg-green-300"
+                      ];
+                      return (
+                        <div 
+                          key={j} 
+                          className={`w-3 h-3 rounded-sm ${colors[level]}`}
+                          title={`${level} contributions`}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+                Displaying a simplified version of GitHub contributions. Visit my profile for more details.
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section id="blog" className="py-20 bg-white dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">Latest Blog Posts</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogs.map((blog, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <a href={blog.slug} className="block h-full">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden h-full flex flex-col hover:shadow-lg transition-shadow">
+                      <div className="p-6 flex-grow">
+                        <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{blog.date}</div>
+                        <h3 className="text-xl font-bold mb-3">{blog.title}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">{blog.excerpt}</p>
+                      </div>
+                      <div className="px-6 pb-6 flex flex-wrap gap-2">
+                        {blog.tags.map((tag, tagIndex) => (
+                          <span 
+                            key={tagIndex} 
+                            className="px-2 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+            <div className="text-center mt-10">
+              <a 
+                href="/blog" 
+                className="px-4 py-2 flex items-center justify-center mx-auto w-max bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+              >
+                View All Posts <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto"
+          >
+            <h2 className="text-3xl font-bold mb-8 text-center">Get In Touch</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
+              <form onSubmit={handleFormSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      placeholder="your.email@example.com"
+                    />
                   </div>
                 </div>
-
-                <Card>
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold mb-2">
-                      Open to Opportunities
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 mb-4">
-                      I'm looking for internships and student projects to apply
-                      my skills and continue learning. Let's connect!
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="border-t py-12 mt-20">
-          <div className="container">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="mb-4 md:mb-0">
-                <div className="font-bold text-xl mb-2">Amar.dev</div>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">
-                  Computer Engineering Student & Web Developer
-                </p>
-              </div>
-
-              <div className="flex flex-col items-center md:items-end">
-                <div className="text-sm text-slate-600 dark:text-slate-400">
-                  © {new Date().getFullYear()} Amar Pandey. All rights reserved.
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    rows={5}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Your message here..."
+                  ></textarea>
                 </div>
-                <div className="flex gap-4 mt-2">
-                  <a
-                    href="#"
-                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400"
+                <div>
+                  <button 
+                    type="submit" 
+                    disabled={formStatus === 'loading'}
+                    className={`w-full px-4 py-2 text-white rounded-md transition-colors ${
+                      formStatus === 'loading' 
+                        ? 'bg-gray-400 cursor-not-allowed' 
+                        : 'bg-blue-600 hover:bg-blue-700'
+                    }`}
                   >
-                    Privacy Policy
-                  </a>
-                  <a
-                    href="#"
-                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400"
-                  >
-                    Terms of Service
-                  </a>
+                    {formStatus === 'loading' ? 'Sending...' : 'Send Message'}
+                  </button>
+                  {formStatus === 'success' && (
+                    <p className="mt-2 text-green-600 dark:text-green-400 text-center">Message sent successfully!</p>
+                  )}
+                  {formStatus === 'error' && (
+                    <p className="mt-2 text-red-600 dark:text-red-400 text-center">Failed to send message. Please try again.</p>
+                  )}
                 </div>
-              </div>
+              </form>
             </div>
-          </div>
-        </footer>
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Social Media Section */}
+      <section id="social" className="py-16 bg-gradient-to-b from-blue-600 to-purple-600 text-white">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="text-3xl font-bold mb-8">Connect With Me</h2>
+            <div className="flex justify-center gap-6 mb-8">
+              <motion.a 
+                href="https://github.com/yourusername" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-gray-900 p-4 rounded-full hover:scale-110 transition-transform"
+                whileHover={{ y: -5 }}
+              >
+                <Github size={24} />
+              </motion.a>
+              <motion.a 
+                href="https://linkedin.com/in/yourusername" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-gray-900 p-4 rounded-full hover:scale-110 transition-transform"
+                whileHover={{ y: -5 }}
+              >
+                <Linkedin size={24} />
+              </motion.a>
+              <motion.a 
+                href="https://twitter.com/yourusername" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-gray-900 p-4 rounded-full hover:scale-110 transition-transform"
+                whileHover={{ y: -5 }}
+              >
+                <Twitter size={24} />
+              </motion.a>
+              <motion.a 
+                href="mailto:your.email@example.com" 
+                className="bg-white text-gray-900 p-4 rounded-full hover:scale-110 transition-transform"
+                whileHover={{ y: -5 }}
+              >
+                <Mail size={24} />
+              </motion.a>
+            </div>
+            <p className="text-xl">
+              Let's build something amazing together!
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 bg-gray-900 text-gray-400 text-center">
+        <div className="container mx-auto px-4">
+          <p>© {new Date().getFullYear()} Your Name. All rights reserved.</p>
+          <p className="text-sm mt-2">Built with Next.js, Tailwind CSS, and ♥</p>
+        </div>
+      </footer>
+    </main>
   );
 }
