@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import CodeBlock from '@tiptap/extension-code-block';
@@ -231,6 +231,9 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
 };
 
 interface ImageAttributes {
+  src: string;
+  alt?: string;
+  title?: string;
   width: string | null;
   height: string | null;
   alignment: 'left' | 'center' | 'right';
@@ -242,6 +245,27 @@ const ResizableImage = Image.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
+      src: {
+        default: null,
+        renderHTML: (attributes: { src?: string }) => {
+          if (!attributes.src) return {};
+          return { src: attributes.src };
+        },
+      },
+      alt: {
+        default: null,
+        renderHTML: (attributes: { alt?: string }) => {
+          if (!attributes.alt) return {};
+          return { alt: attributes.alt };
+        },
+      },
+      title: {
+        default: null,
+        renderHTML: (attributes: { title?: string }) => {
+          if (!attributes.title) return {};
+          return { title: attributes.title };
+        },
+      },
       width: {
         default: null as string | null,
         renderHTML: (attributes: { width?: string | null }) => {
@@ -423,13 +447,18 @@ const ResizableImage = Image.extend({
   },
 });
 
-const MenuBar = ({ editor, onPreview, previewMode }: { 
-  editor: any; 
+interface MenuBarProps {
+  editor: Editor | null;
   onPreview: () => void;
   previewMode: 'none' | 'side' | 'full';
-}) => {
-  if (!editor) return null;
+}
+
+const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+
+  if (!editor) {
+    return null;
+  }
 
   const addLink = () => {
     const url = window.prompt('Enter URL');
@@ -437,18 +466,17 @@ const MenuBar = ({ editor, onPreview, previewMode }: {
   };
 
   const handleImageAdd = (url: string, width?: string, height?: string) => {
-    const style = [
-      width ? `width: ${width}` : '',
-      height ? `height: ${height}` : ''
-    ].filter(Boolean).join('; ');
-
     editor.chain().focus().setImage({ 
       src: url,
-      HTMLAttributes: {
-        style
-      },
-      float: 'none',
-      alignment: 'center'
+      alt: 'Blog post image',
+      title: width || height ? `Image (${width} × ${height})` : undefined,
+      ...((width || height) && {
+        width,
+        height,
+        alignment: 'center',
+        float: 'none',
+        style: `width: ${width}; height: ${height};`
+      })
     }).run();
   };
 
