@@ -2,12 +2,11 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import BlogPostContent from './blog-post-content';
 
-type Props = {
-  params: { id: string }
-}
-
-// Generate dynamic metadata for each blog post
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
   try {
     const post = await fetchPost(params.id);
     return {
@@ -52,7 +51,11 @@ async function fetchPost(id: string) {
   }
 }
 
-export default async function BlogPost({ params }: Props) {
+export default async function BlogPost({
+  params,
+}: {
+  params: { id: string };
+}) {
   try {
     const post = await fetchPost(params.id);
     return <BlogPostContent post={post} />;
