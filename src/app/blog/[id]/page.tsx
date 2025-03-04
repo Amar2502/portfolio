@@ -53,6 +53,7 @@ export default async function BlogPost({ params }: { params: { id: string } }) {
     const post = await fetchPost(params.id);
     return <BlogPostContent post={post} />;
   } catch (error) {
+    console.log("error", error);    
     notFound();
   }
 } 

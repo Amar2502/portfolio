@@ -230,42 +230,49 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
   );
 };
 
-// Custom Resizable Image Extension
+interface ImageAttributes {
+  width: string | null;
+  height: string | null;
+  alignment: 'left' | 'center' | 'right';
+  float: 'left' | 'right' | 'none';
+  style: string | null;
+}
+
 const ResizableImage = Image.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
       width: {
-        default: null,
-        renderHTML: attributes => {
+        default: null as string | null,
+        renderHTML: (attributes: { width?: string | null }) => {
           if (!attributes.width) return {};
           return { width: attributes.width };
         },
       },
       height: {
-        default: null,
-        renderHTML: attributes => {
+        default: null as string | null,
+        renderHTML: (attributes: { height?: string | null }) => {
           if (!attributes.height) return {};
           return { height: attributes.height };
         },
       },
       alignment: {
-        default: 'center',
-        renderHTML: attributes => {
+        default: 'center' as const,
+        renderHTML: (attributes: { alignment?: 'left' | 'center' | 'right' }) => {
           const align = attributes.alignment || 'center';
           return { 'data-align': align };
         },
       },
       float: {
-        default: 'none',
-        renderHTML: attributes => {
+        default: 'none' as const,
+        renderHTML: (attributes: { float?: 'left' | 'right' | 'none' }) => {
           const float = attributes.float || 'none';
           return { style: `float: ${float}; margin: ${float === 'left' ? '0 1em 1em 0' : float === 'right' ? '0 0 1em 1em' : '0'}` };
         },
       },
       style: {
-        default: null,
-        renderHTML: attributes => {
+        default: null as string | null,
+        renderHTML: (attributes: { style?: string | null }) => {
           if (!attributes.style) return {};
           return { style: attributes.style };
         },
@@ -795,6 +802,8 @@ export default function BlogEditor() {
         router.push("/blog");
       }, 2000);
     } catch (error) {
+      console.log("error", error);
+      
       setStatus("error");
       setIsPublishing(false);
     }
