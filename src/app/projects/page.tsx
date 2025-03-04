@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Github, Calendar } from "lucide-react";
+import Image from "next/image";
 
 interface Project {
   id: string;
@@ -23,9 +24,10 @@ const ProjectCard = ({ project }: { project: Project }) => (
     className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow"
   >
     <div className="relative aspect-video overflow-hidden">
-      <img
+      <Image
         src={project.image}
         alt={project.title}
+        fill
         className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
       />
     </div>
@@ -86,7 +88,7 @@ export default function Projects() {
         if (!response.ok) {
           throw new Error('Failed to fetch projects');
         }
-        const data = await response.json();
+        const data = await response.json() as Project[];
         setProjects(data);
         setError(null);
       } catch (error) {

@@ -21,10 +21,16 @@ import Image from "next/image";
 interface BlogPost {
   _id: string;
   title: string;
-  excerpt: string;
+  date: string;
+  description: string;
   tags: string[];
+  // Add other fields that exist in your blog post data
+}
+
+interface FormattedBlogPost extends Omit<BlogPost, 'date'> {
   date: string;
   slug: string;
+  tags: string[];
 }
 
 export default function PortfolioPage() {
@@ -40,7 +46,7 @@ export default function PortfolioPage() {
     email: "",
     message: "",
   });
-  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
+  const [recentPosts, setRecentPosts] = useState<FormattedBlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -66,15 +72,18 @@ export default function PortfolioPage() {
       try {
         const response = await fetch('/api/blog?limit=3');
         if (!response.ok) throw new Error('Failed to fetch posts');
-        const posts = await response.json();
-        setRecentPosts(posts.map((post: any) => ({
+        const posts = await response.json() as BlogPost[];
+        console.log("posts", posts);
+        
+        setRecentPosts(posts.map((post: BlogPost): FormattedBlogPost => ({
           ...post,
           date: new Date(post.date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           }),
-          slug: `/blog/${post._id}`
+          slug: `/blog/${post._id}`,
+          tags: post.tags
         })));
       } catch (error) {
         console.error('Error fetching recent posts:', error);
@@ -788,7 +797,7 @@ export default function PortfolioPage() {
                             className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-3"
                             whileHover={{ x: 5 }}
                           >
-                            {blog.excerpt}
+                            {blog.description}
                           </motion.p>
                         </div>
                         <div className="px-4 sm:px-6 pb-4 sm:pb-6">

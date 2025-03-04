@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   } catch (error) {
     return {
       title: 'Blog Post Not Found',
-      description: 'The requested blog post could not be found.',
+      description: `The requested blog post could not be found, ${error}`,
     }
   }
 }
