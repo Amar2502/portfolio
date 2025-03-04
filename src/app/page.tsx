@@ -317,7 +317,7 @@ export default function PortfolioPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 sm:py-20 md:py-24 lg:py-32 mt-16">
+      <section className="container mx-auto px-4 py-12 sm:py-16 md:py-20 lg:py-36 mt-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -329,7 +329,7 @@ export default function PortfolioPage() {
           className="max-w-3xl mx-auto text-center"
         >
           <motion.h1 
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -344,7 +344,7 @@ export default function PortfolioPage() {
             </motion.span>
           </motion.h1>
           <motion.p 
-            className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-6 sm:mb-8 px-4"
+            className="text-base sm:text-lg md:text-xl text-gray-700 dark:text-gray-300 mb-4 sm:mb-6 md:mb-8 px-2 sm:px-4"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
@@ -352,7 +352,7 @@ export default function PortfolioPage() {
             Full Stack Developer specializing in modern web technologies
           </motion.p>
           <motion.div 
-            className="flex flex-wrap justify-center gap-3 sm:gap-4"
+            className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
@@ -360,7 +360,7 @@ export default function PortfolioPage() {
             <motion.a
               href="#projects"
               onClick={handleScroll}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+              className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors text-sm sm:text-base"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -369,7 +369,7 @@ export default function PortfolioPage() {
             <motion.a
               href="#contact"
               onClick={handleScroll}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-md transition-colors"
+              className="w-full sm:w-auto px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-md transition-colors text-sm sm:text-base"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -380,7 +380,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* About Me Section */}
-      <section id="about" className="py-20 bg-white dark:bg-gray-800">
+      <section id="about" className="py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -390,7 +390,7 @@ export default function PortfolioPage() {
             className="max-w-3xl mx-auto"
           >
             <motion.h2 
-              className="text-3xl font-bold mb-8 text-center"
+              className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center"
               initial={{ y: 20, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -398,9 +398,9 @@ export default function PortfolioPage() {
             >
               About Me
             </motion.h2>
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="grid md:grid-cols-2 gap-6 sm:gap-8 items-center">
               <motion.div 
-                className="relative bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden aspect-square"
+                className="relative bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden aspect-square max-w-sm mx-auto w-full"
                 initial={{ scale: 0.8, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5 }}
@@ -421,26 +421,27 @@ export default function PortfolioPage() {
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
                 viewport={{ once: true }}
+                className="space-y-4 sm:space-y-6"
               >
-                <p className="text-gray-700 dark:text-gray-300 mb-4">
+                <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                   I'm a passionate developer with expertise in modern web
                   development. I enjoy solving complex problems and building
                   intuitive, efficient applications.
                 </p>
-                <p className="text-gray-700 dark:text-gray-300 mb-6">
+                <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                   With a strong background in computer science and hands-on
                   experience in full-stack development, I bring an innovative
                   and practical approach to every project I work on.
                 </p>
                 <motion.div 
-                  className="flex gap-4"
+                  className="flex justify-center sm:justify-start"
                   whileHover={{ scale: 1.02 }}
                 >
                   <motion.a
                     href="/resume.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-md transition-colors"
+                    className="w-full sm:w-auto px-6 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-600 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 rounded-md transition-colors text-sm sm:text-base text-center"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -454,7 +455,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-24 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <section id="projects" className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -464,25 +465,25 @@ export default function PortfolioPage() {
             className="max-w-6xl mx-auto"
           >
             <motion.div 
-              className="text-center mb-16"
+              className="text-center mb-8 sm:mb-12 md:mb-16"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               viewport={{ once: true }}
             >
               <motion.h2 
-                className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-4"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-3 sm:mb-4"
               >
                 Featured Projects
               </motion.h2>
               <motion.p 
-                className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+                className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
               >
                 A collection of my recent works showcasing my skills and expertise
               </motion.p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {projects.map((project, index) => (
                 <motion.div
                   key={index}
@@ -499,7 +500,7 @@ export default function PortfolioPage() {
                       href={project.demo || project.github} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="block relative h-48 overflow-hidden"
+                      className="block relative h-40 sm:h-48 overflow-hidden"
                     >
                       <Image
                         src={project.image}
@@ -514,33 +515,33 @@ export default function PortfolioPage() {
                         className="absolute inset-0 flex items-center justify-center"
                       >
                         <motion.span 
-                          className="px-6 py-3 bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white rounded-full flex items-center gap-2 font-medium shadow-lg"
+                          className="px-4 sm:px-6 py-2 sm:py-3 bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white rounded-full flex items-center gap-2 font-medium shadow-lg text-sm sm:text-base"
                           whileHover={{ scale: 1.05 }}
                         >
-                          <ExternalLink size={18} />
+                          <ExternalLink size={16} className="sm:w-5 sm:h-5" />
                           {project.demo ? 'View Demo' : 'View on GitHub'}
                         </motion.span>
                       </motion.div>
                     </a>
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                       <motion.h3 
-                        className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+                        className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
                         whileHover={{ x: 5 }}
                       >
                         {project.title}
                       </motion.h3>
                       <motion.p 
-                        className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2"
+                        className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-2"
                         whileHover={{ x: 5 }}
                       >
                         {project.description}
                       </motion.p>
-                      <div className="flex flex-wrap gap-2 mb-6">
+                      <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
                         {project.tags.map((tag, tagIndex) => (
                           <motion.span
                             key={tagIndex}
-                            className="px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 
-                              text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium
+                            className="px-2 sm:px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 
+                              text-blue-700 dark:text-blue-300 rounded-full text-xs sm:text-sm font-medium
                               border border-blue-100 dark:border-blue-800"
                             whileHover={{ 
                               scale: 1.05,
@@ -557,10 +558,10 @@ export default function PortfolioPage() {
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          className="flex items-center gap-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                           whileHover={{ x: 5 }}
                         >
-                          <Github size={18} />
+                          <Github size={16} className="sm:w-5 sm:h-5" />
                           <span>Code</span>
                         </motion.a>
                         {project.demo && (
@@ -568,10 +569,10 @@ export default function PortfolioPage() {
                             href={project.demo}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            className="flex items-center gap-2 text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                             whileHover={{ x: 5 }}
                           >
-                            <ExternalLink size={18} />
+                            <ExternalLink size={16} className="sm:w-5 sm:h-5" />
                             <span>Live Demo</span>
                           </motion.a>
                         )}
@@ -583,7 +584,7 @@ export default function PortfolioPage() {
             </div>
 
             <motion.div 
-              className="text-center mt-12"
+              className="text-center mt-8 sm:mt-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -591,14 +592,14 @@ export default function PortfolioPage() {
             >
               <motion.a
                 href="/projects"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
                   text-white rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300
-                  hover:scale-105"
+                  hover:scale-105 text-sm sm:text-base"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 View All Projects 
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </motion.a>
             </motion.div>
           </motion.div>
@@ -606,7 +607,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Skills & Education Section */}
-      <section id="skills" className="py-20 bg-white dark:bg-gray-800">
+      <section id="skills" className="py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -615,20 +616,20 @@ export default function PortfolioPage() {
             viewport={{ once: true }}
             className="max-w-4xl mx-auto"
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
               Skills & Education
             </h2>
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
               {/* Skills Section */}
-              <div className="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
+              <div className="bg-gray-100 dark:bg-gray-700 p-4 sm:p-6 rounded-lg">
+                <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center">
                   <code className="text-blue-600 dark:text-blue-400 mr-2">
                     {"<Skills />"}
                   </code>
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="text-lg font-medium mb-2">Frontend</h4>
+                    <h4 className="text-base sm:text-lg font-medium mb-2">Frontend</h4>
                     <div className="flex flex-wrap gap-2">
                       {[
                         "React",
@@ -641,7 +642,7 @@ export default function PortfolioPage() {
                       ].map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+                          className="px-2 sm:px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs sm:text-sm"
                         >
                           {skill}
                         </span>
@@ -649,7 +650,7 @@ export default function PortfolioPage() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-lg font-medium mb-2">Backend</h4>
+                    <h4 className="text-base sm:text-lg font-medium mb-2">Backend</h4>
                     <div className="flex flex-wrap gap-2">
                       {[
                         "Node.js",
@@ -661,7 +662,7 @@ export default function PortfolioPage() {
                       ].map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm"
+                          className="px-2 sm:px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs sm:text-sm"
                         >
                           {skill}
                         </span>
@@ -669,7 +670,7 @@ export default function PortfolioPage() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-lg font-medium mb-2">Tools & Others</h4>
+                    <h4 className="text-base sm:text-lg font-medium mb-2">Tools & Others</h4>
                     <div className="flex flex-wrap gap-2">
                       {[
                         "Git",
@@ -681,7 +682,7 @@ export default function PortfolioPage() {
                       ].map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm"
+                          className="px-2 sm:px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-xs sm:text-sm"
                         >
                           {skill}
                         </span>
@@ -692,29 +693,29 @@ export default function PortfolioPage() {
               </div>
 
               {/* Education Section */}
-              <div className="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg">
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
+              <div className="bg-gray-100 dark:bg-gray-700 p-4 sm:p-6 rounded-lg">
+                <h3 className="text-lg sm:text-xl font-semibold mb-4 flex items-center">
                   <code className="text-blue-600 dark:text-blue-400 mr-2">
                     {"<Education />"}
                   </code>
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div>
-                    <h4 className="text-lg font-medium">
+                    <h4 className="text-base sm:text-lg font-medium">
                       Bachelor of Technology
                     </h4>
-                    <p className="text-gray-600 dark:text-gray-300">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                       Computer Engineering
                     </p>
-                    <p className="text-gray-500 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                       Dr. Babasaheb Ambedkar Technological University
                     </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                       2020 - 2024
                     </p>
                   </div>
                   <div>
-                    <h4 className="text-lg font-medium">Relevant Coursework</h4>
+                    <h4 className="text-base sm:text-lg font-medium">Relevant Coursework</h4>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {[
                         "Data Structures",
@@ -726,7 +727,7 @@ export default function PortfolioPage() {
                       ].map((course) => (
                         <span
                           key={course}
-                          className="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-full text-sm"
+                          className="px-2 sm:px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-full text-xs sm:text-sm"
                         >
                           {course}
                         </span>
@@ -741,7 +742,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Blog Section */}
-      <section id="blog" className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+      <section id="blog" className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -751,7 +752,7 @@ export default function PortfolioPage() {
             className="max-w-6xl mx-auto"
           >
             <motion.h2 
-              className="text-4xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
+              className="text-3xl sm:text-4xl font-bold text-center mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -760,7 +761,7 @@ export default function PortfolioPage() {
               Latest Blog Posts
             </motion.h2>
             <motion.p 
-              className="text-center text-gray-600 dark:text-gray-400 mb-12"
+              className="text-center text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-8 sm:mb-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -769,15 +770,15 @@ export default function PortfolioPage() {
               Insights, tutorials, and thoughts on web development
             </motion.p>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {loading ? (
-                <div className="col-span-3 text-center py-10">
+                <div className="col-span-3 text-center py-8 sm:py-10">
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                     className="inline-block"
                   >
-                    <svg className="w-8 h-8 text-blue-500" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
@@ -796,33 +797,33 @@ export default function PortfolioPage() {
                   >
                     <a href={`/blog/${blog._id}`} className="block h-full">
                       <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden h-full flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700">
-                        <div className="p-6 flex-grow">
+                        <div className="p-4 sm:p-6 flex-grow">
                           <motion.div 
-                            className="text-sm text-blue-600 dark:text-blue-400 mb-3 font-medium"
+                            className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 mb-2 sm:mb-3 font-medium"
                             whileHover={{ x: 5 }}
                           >
                             {blog.date}
                           </motion.div>
                           <motion.h3 
-                            className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+                            className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
                             whileHover={{ x: 5 }}
                           >
                             {blog.title}
                           </motion.h3>
                           <motion.p 
-                            className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3"
+                            className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-3"
                             whileHover={{ x: 5 }}
                           >
                             {blog.excerpt}
                           </motion.p>
                         </div>
-                        <div className="px-6 pb-6">
+                        <div className="px-4 sm:px-6 pb-4 sm:pb-6">
                           <div className="flex flex-wrap gap-2">
                             {blog.tags.map((tag, tagIndex) => (
                               <motion.span
                                 key={tagIndex}
-                                className="px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 
-                                  text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium
+                                className="px-2 sm:px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 
+                                  text-blue-700 dark:text-blue-300 rounded-full text-xs sm:text-sm font-medium
                                   border border-blue-100 dark:border-blue-800"
                                 whileHover={{ 
                                   scale: 1.05,
@@ -840,12 +841,12 @@ export default function PortfolioPage() {
                   </motion.div>
                 ))
               ) : (
-                <div className="col-span-3 text-center py-10">
+                <div className="col-span-3 text-center py-8 sm:py-10">
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
-                    className="text-gray-500 dark:text-gray-400"
+                    className="text-sm sm:text-base text-gray-500 dark:text-gray-400"
                   >
                     No blog posts available yet.
                   </motion.div>
@@ -854,7 +855,7 @@ export default function PortfolioPage() {
             </div>
 
             <motion.div 
-              className="text-center mt-12"
+              className="text-center mt-8 sm:mt-12"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -862,14 +863,14 @@ export default function PortfolioPage() {
             >
               <motion.a
                 href="/blog"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
                   text-white rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300
-                  hover:scale-105"
+                  hover:scale-105 text-sm sm:text-base"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 View All Posts 
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </motion.a>
             </motion.div>
           </motion.div>
@@ -877,7 +878,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900">
+      <section id="contact" className="py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
@@ -886,7 +887,7 @@ export default function PortfolioPage() {
             viewport={{ once: true }}
             className="max-w-3xl mx-auto"
           >
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 md:mb-8 text-center">
               Get In Touch
             </h2>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
@@ -951,7 +952,7 @@ export default function PortfolioPage() {
                   <button
                     type="submit"
                     disabled={formStatus === "loading"}
-                    className={`w-full px-4 py-2 text-sm sm:text-base text-white rounded-md transition-colors ${
+                    className={`w-full px-4 py-2.5 text-sm sm:text-base text-white rounded-md transition-colors ${
                       formStatus === "loading"
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-blue-600 hover:bg-blue-700"
@@ -979,7 +980,7 @@ export default function PortfolioPage() {
       {/* Social Media Section */}
       <section
         id="social"
-        className="py-12 sm:py-16 bg-gradient-to-b from-blue-600 to-purple-600 text-white"
+        className="py-6 sm:py-8 md:py-12 bg-gradient-to-b from-blue-600 to-purple-600 text-white"
       >
         <div className="container mx-auto px-4">
           <motion.div
@@ -990,7 +991,7 @@ export default function PortfolioPage() {
             className="text-center"
           >
             <motion.h2 
-              className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8"
+              className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6"
               initial={{ y: 20, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -999,24 +1000,41 @@ export default function PortfolioPage() {
               Connect With Me
             </motion.h2>
             <motion.div 
-              className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 sm:mb-8"
+              className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6"
               initial={{ scale: 0.8, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
             >
               {[
-                { icon: <Github size={20} className="sm:w-6 sm:h-6" />, href: "https://github.com/amar2502" },
-                { icon: <Linkedin size={20} className="sm:w-6 sm:h-6" />, href: "https://www.linkedin.com/in/amar-pandey-486ab6337/" },
-                { icon: <Twitter size={20} className="sm:w-6 sm:h-6" />, href: "https://x.com/amarpandey2502" },
-                { icon: <Instagram size={20} className="sm:w-6 sm:h-6" />, href: "https://instagram.com/amarpandey2502" }
+                { 
+                  icon: <Github className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />, 
+                  href: "https://github.com/amar2502",
+                  label: "GitHub"
+                },
+                { 
+                  icon: <Linkedin className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />, 
+                  href: "https://www.linkedin.com/in/amar-pandey-486ab6337/",
+                  label: "LinkedIn"
+                },
+                { 
+                  icon: <Twitter className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />, 
+                  href: "https://x.com/amarpandey2502",
+                  label: "Twitter"
+                },
+                { 
+                  icon: <Instagram className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />, 
+                  href: "https://instagram.com/amarpandey2502",
+                  label: "Instagram"
+                }
               ].map((social, index) => (
                 <motion.a
                   key={index}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white text-gray-900 p-3 sm:p-4 rounded-full hover:scale-110 transition-transform"
+                  aria-label={social.label}
+                  className="bg-white text-gray-900 p-2 sm:p-3 md:p-4 rounded-full hover:scale-110 transition-transform"
                   whileHover={{ 
                     y: -5, 
                     scale: 1.2,
@@ -1031,7 +1049,7 @@ export default function PortfolioPage() {
               ))}
             </motion.div>
             <motion.p 
-              className="text-base sm:text-lg md:text-xl"
+              className="text-sm sm:text-base md:text-lg font-medium"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
@@ -1045,7 +1063,7 @@ export default function PortfolioPage() {
 
       {/* Footer */}
       <motion.footer 
-        className="py-4 sm:py-6 bg-gray-900/95 backdrop-blur-sm text-gray-400 text-center text-xs sm:text-sm border-t border-gray-800"
+        className="py-3 sm:py-4 bg-gray-900/95 backdrop-blur-sm text-gray-400 text-center border-t border-gray-800"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -1053,39 +1071,41 @@ export default function PortfolioPage() {
       >
         <div className="container mx-auto px-4">
           <motion.div 
-            className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1"
+            className="flex flex-wrap items-center justify-center gap-x-1.5 sm:gap-x-2 gap-y-1 text-[10px] sm:text-sm"
             whileHover={{ scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
             <span>©{new Date().getFullYear()}</span>
             <span className="font-medium text-gray-300">Amar Pandey</span>
             <span className="text-gray-500 hidden sm:inline">•</span>
-            <span>Made with</span>
-            <motion.span 
-              className="text-red-500"
-              animate={{ 
-                scale: [1, 1.2, 1],
-                rotate: [0, 10, -10, 0]
-              }}
-              transition={{ 
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              ♥
-            </motion.span>
-            <span>using</span>
-            <motion.a 
-              href="https://nextjs.org" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-blue-400 hover:text-blue-300 transition-colors"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Next.js
-            </motion.a>
+            <div className="flex items-center gap-x-1">
+              <span>Made with</span>
+              <motion.span 
+                className="text-red-500 inline-block"
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 10, -10, 0]
+                }}
+                transition={{ 
+                  duration: 1.5,
+                  repeat: Infinity,
+                  repeatType: "reverse"
+                }}
+              >
+                ♥
+              </motion.span>
+              <span>using</span>
+              <motion.a 
+                href="https://nextjs.org" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Next.js
+              </motion.a>
+            </div>
           </motion.div>
         </div>
       </motion.footer>
