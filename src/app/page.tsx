@@ -44,6 +44,30 @@ export default function PortfolioPage() {
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Add these animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.3 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } }
+  };
+
+  const cardVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 100 } }
+  };
+
+  const imageOverlayVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.3 } }
+  };
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   useEffect(() => {
@@ -133,7 +157,7 @@ export default function PortfolioPage() {
         "Tailwindcss",
       ],
       github: "https://github.com/Amar2502/Library_Management",
-      demo: "https://amarpandey.in/librarymanagement",
+      // demo: "https://amarpandey.in/librarymanagement",
       image: "/libraryManagement.png",
     },
     {
@@ -142,7 +166,7 @@ export default function PortfolioPage() {
         "A dynamic quiz application with real-time scoring, leaderboards, and customizable question sets for engaging learning experiences.",
       tags: ["React", "Tailwind CSS"],
       github: "https://github.com/Amar2502/Quiz_App",
-      demo: "https://amarpandey.in/quizapp",
+      // demo: "https://amarpandey.in/quizapp",
       image: "/QuizApp.png",
     },
   ];
@@ -430,83 +454,105 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900">
+      <section id="projects" className="py-24 bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
+            className="max-w-6xl mx-auto"
           >
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center">
-              Featured Projects
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="text-center mb-16">
+              <motion.h2 
+                variants={itemVariants}
+                className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
+              >
+                Featured Projects
+              </motion.h2>
+              <motion.p 
+                variants={itemVariants}
+                className="mt-4 text-lg text-gray-600 dark:text-gray-400"
+              >
+                Here are some of my recent works
+              </motion.p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project, index) => (
                 <motion.div
                   key={index}
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.2 }}
+                  variants={cardVariants}
+                  whileHover={{ y: -10 }}
+                  className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                 >
-                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden h-full flex flex-col">
-                    <div className="h-48 sm:h-56 relative">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      />
+                  <a 
+                    href={project.demo || project.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block relative h-48 overflow-hidden group"
+                  >
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <motion.div
+                      initial="hidden"
+                      whileHover="visible"
+                      variants={imageOverlayVariants}
+                      className="absolute inset-0 flex items-center justify-center bg-black/40"
+                    >
+                      <motion.span 
+                        variants={itemVariants}
+                        className="px-4 py-2 bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white rounded-full flex items-center gap-2"
+                      >
+                        <ExternalLink size={16} />
+                        {project.demo ? 'View Demo' : 'View on GitHub'}
+                      </motion.span>
+                    </motion.div>
+                  </a>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-3">{project.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {project.tags.map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                    <div className="p-4 sm:p-6 flex-grow">
-                      <h3 className="text-lg sm:text-xl font-bold mb-2">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4">
-                        {project.tags.map((tag, tagIndex) => (
-                          <span
-                            key={tagIndex}
-                            className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs sm:text-sm rounded-md"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 flex gap-3 sm:gap-4">
+                    <div className="flex gap-4">
                       <a
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
+                        className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
                       >
-                        <Github size={16} />
+                        <Github size={18} />
                         <span>Code</span>
                       </a>
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm sm:text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1"
-                      >
-                        <ExternalLink size={16} />
-                        <span>Demo</span>
-                      </a>
+                      {project.demo && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                        >
+                          <ExternalLink size={18} />
+                          <span>Live Demo</span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </motion.div>
               ))}
-            </div>
-            <div className="text-center mt-8 sm:mt-10">
-              <a
-                href="/projects"
-                className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors text-sm sm:text-base"
-              >
-                View All Projects <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
             </div>
           </motion.div>
         </div>
