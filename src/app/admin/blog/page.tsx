@@ -9,12 +9,11 @@ import Link from '@tiptap/extension-link';
 import CodeBlock from '@tiptap/extension-code-block';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
-import { NodeSelection } from '@tiptap/pm/state';
 import {
   Bold, Italic, List, ListOrdered, Heading1, Heading2,
   Code, Quote, Link as LinkIcon, Image as ImageIcon,
-  Undo, Redo, Save, Trash2, Eye, EyeOff, Layout, LayoutList,
-  Calendar, Clock, Hash, Loader2, X, Upload, Link2, Maximize2, Minimize2
+  Undo, Redo, Save, Trash2, Eye, Layout, LayoutList,
+  Calendar, Clock, Hash, Loader2, X, Upload, Link2,
 } from 'lucide-react';
 import Auth from './auth';
 
