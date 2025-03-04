@@ -32,22 +32,27 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 }
 
 async function fetchPost(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blog/${id}`, {
-    next: { revalidate: 60 }, // Revalidate every minute
-  });
-  
-  if (!res.ok) throw new Error('Failed to fetch post');
-  
-  return res.json();
+  try {
+    const res = await fetch(`http://localhost:3000/api/blog/${id}`, {
+      cache: 'no-store'
+    });
+    
+    if (!res.ok) {
+      throw new Error('Failed to fetch post');
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    throw error;
+  }
 }
 
 export default async function BlogPost({ params }: { params: { id: string } }) {
-  let post;
   try {
-    post = await fetchPost(params.id);
+    const post = await fetchPost(params.id);
+    return <BlogPostContent post={post} />;
   } catch (error) {
     notFound();
   }
-
-  return <BlogPostContent post={post} />;
 } 
