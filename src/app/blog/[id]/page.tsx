@@ -2,8 +2,15 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import BlogPostContent from './blog-post-content';
 
+interface PageProps {
+  params: {
+    id: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
 // Generate dynamic metadata for each blog post
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
     const post = await fetchPost(params.id);
     return {
@@ -48,7 +55,7 @@ async function fetchPost(id: string) {
   }
 }
 
-export default async function BlogPost({ params }: { params: { id: string } }) {
+export default async function BlogPost({ params, searchParams }: PageProps) {
   try {
     const post = await fetchPost(params.id);
     return <BlogPostContent post={post} />;
