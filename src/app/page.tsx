@@ -454,106 +454,153 @@ export default function PortfolioPage() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-24 bg-gray-50 dark:bg-gray-900">
+      <section id="projects" className="py-24 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             className="max-w-6xl mx-auto"
           >
-            <div className="text-center mb-16">
+            <motion.div 
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               <motion.h2 
-                variants={itemVariants}
-                className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
+                className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 mb-4"
               >
                 Featured Projects
               </motion.h2>
               <motion.p 
-                variants={itemVariants}
-                className="mt-4 text-lg text-gray-600 dark:text-gray-400"
+                className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
               >
-                Here are some of my recent works
+                A collection of my recent works showcasing my skills and expertise
               </motion.p>
-            </div>
+            </motion.div>
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project, index) => (
                 <motion.div
                   key={index}
-                  variants={cardVariants}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
                   whileHover={{ y: -10 }}
-                  className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+                  className="group relative"
                 >
-                  <a 
-                    href={project.demo || project.github} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block relative h-48 overflow-hidden group"
-                  >
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-          <motion.div
-                      initial="hidden"
-                      whileHover="visible"
-                      variants={imageOverlayVariants}
-                      className="absolute inset-0 flex items-center justify-center bg-black/40"
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500" />
+                  <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700">
+                    <a 
+                      href={project.demo || project.github} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block relative h-48 overflow-hidden"
                     >
-                      <motion.span 
-                        variants={itemVariants}
-                        className="px-4 py-2 bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white rounded-full flex items-center gap-2"
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileHover={{ opacity: 1, y: 0 }}
+                        className="absolute inset-0 flex items-center justify-center"
                       >
-                        <ExternalLink size={16} />
-                        {project.demo ? 'View Demo' : 'View on GitHub'}
-                      </motion.span>
-                    </motion.div>
-                  </a>
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold mb-3">{project.title}</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {project.tags.map((tag, tagIndex) => (
-                        <span
-                          key={tagIndex}
-                          className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-full"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex gap-4">
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                      >
-                        <Github size={18} />
-                        <span>Code</span>
-                      </a>
-                      {project.demo && (
-                        <a
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                        <motion.span 
+                          className="px-6 py-3 bg-white/90 dark:bg-gray-800/90 text-gray-900 dark:text-white rounded-full flex items-center gap-2 font-medium shadow-lg"
+                          whileHover={{ scale: 1.05 }}
                         >
                           <ExternalLink size={18} />
-                          <span>Live Demo</span>
-                        </a>
-                      )}
+                          {project.demo ? 'View Demo' : 'View on GitHub'}
+                        </motion.span>
+                      </motion.div>
+                    </a>
+                    <div className="p-6">
+                      <motion.h3 
+                        className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+                        whileHover={{ x: 5 }}
+                      >
+                        {project.title}
+                      </motion.h3>
+                      <motion.p 
+                        className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2"
+                        whileHover={{ x: 5 }}
+                      >
+                        {project.description}
+                      </motion.p>
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {project.tags.map((tag, tagIndex) => (
+                          <motion.span
+                            key={tagIndex}
+                            className="px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 
+                              text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium
+                              border border-blue-100 dark:border-blue-800"
+                            whileHover={{ 
+                              scale: 1.05,
+                              backgroundColor: "rgba(59, 130, 246, 0.1)",
+                              transition: { duration: 0.2 }
+                            }}
+                          >
+                            {tag}
+                          </motion.span>
+                        ))}
+                      </div>
+                      <div className="flex gap-4">
+                        <motion.a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                          whileHover={{ x: 5 }}
+                        >
+                          <Github size={18} />
+                          <span>Code</span>
+                        </motion.a>
+                        {project.demo && (
+                          <motion.a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            whileHover={{ x: 5 }}
+                          >
+                            <ExternalLink size={18} />
+                            <span>Live Demo</span>
+                          </motion.a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
               ))}
             </div>
+
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <motion.a
+                href="/projects"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                  text-white rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300
+                  hover:scale-105"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View All Projects 
+                <ArrowRight className="w-5 h-5" />
+              </motion.a>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -694,68 +741,137 @@ export default function PortfolioPage() {
       </section>
 
       {/* Blog Section */}
-      <section id="blog" className="py-20 bg-white dark:bg-gray-800">
+      <section id="blog" className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            className="max-w-6xl mx-auto"
           >
-            <h2 className="text-3xl font-bold mb-8 text-center">
+            <motion.h2 
+              className="text-4xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               Latest Blog Posts
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </motion.h2>
+            <motion.p 
+              className="text-center text-gray-600 dark:text-gray-400 mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              Insights, tutorials, and thoughts on web development
+            </motion.p>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {loading ? (
-                <div className="col-span-3 text-center py-10 text-gray-500 dark:text-gray-400">
-                  Loading posts...
+                <div className="col-span-3 text-center py-10">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="inline-block"
+                  >
+                    <svg className="w-8 h-8 text-blue-500" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  </motion.div>
                 </div>
               ) : recentPosts.length > 0 ? (
-                recentPosts.map((blog) => (
+                recentPosts.map((blog, index) => (
                   <motion.div
                     key={blog._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
                     whileHover={{ y: -5 }}
-                    transition={{ duration: 0.2 }}
+                    className="group"
                   >
                     <a href={`/blog/${blog._id}`} className="block h-full">
-                      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden h-full flex flex-col hover:shadow-lg transition-shadow">
+                      <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden h-full flex flex-col shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700">
                         <div className="p-6 flex-grow">
-                          <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                          <motion.div 
+                            className="text-sm text-blue-600 dark:text-blue-400 mb-3 font-medium"
+                            whileHover={{ x: 5 }}
+                          >
                             {blog.date}
-                          </div>
-                          <h3 className="text-xl font-bold mb-3">{blog.title}</h3>
-                          <p className="text-gray-600 dark:text-gray-400 mb-4">
+                          </motion.div>
+                          <motion.h3 
+                            className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+                            whileHover={{ x: 5 }}
+                          >
+                            {blog.title}
+                          </motion.h3>
+                          <motion.p 
+                            className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3"
+                            whileHover={{ x: 5 }}
+                          >
                             {blog.excerpt}
-                          </p>
+                          </motion.p>
                         </div>
-                        <div className="px-6 pb-6 flex flex-wrap gap-2">
-                          {blog.tags.map((tag: string, tagIndex: number) => (
-                            <span
-                              key={tagIndex}
-                              className="px-2 py-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm rounded-md"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                        <div className="px-6 pb-6">
+                          <div className="flex flex-wrap gap-2">
+                            {blog.tags.map((tag, tagIndex) => (
+                              <motion.span
+                                key={tagIndex}
+                                className="px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 
+                                  text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium
+                                  border border-blue-100 dark:border-blue-800"
+                                whileHover={{ 
+                                  scale: 1.05,
+                                  backgroundColor: "rgba(59, 130, 246, 0.1)",
+                                  transition: { duration: 0.2 }
+                                }}
+                              >
+                                {tag}
+                              </motion.span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </a>
                   </motion.div>
                 ))
               ) : (
-                <div className="col-span-3 text-center py-10 text-gray-500 dark:text-gray-400">
-                  No blog posts available yet.
+                <div className="col-span-3 text-center py-10">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-gray-500 dark:text-gray-400"
+                  >
+                    No blog posts available yet.
+                  </motion.div>
                 </div>
               )}
             </div>
-            <div className="text-center mt-10">
-              <a
+
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <motion.a
                 href="/blog"
-                className="px-4 py-2 flex items-center justify-center mx-auto w-max bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                  text-white rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300
+                  hover:scale-105"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                View All Posts <ArrowRight className="ml-2 h-4 w-4" />
-              </a>
-            </div>
+                View All Posts 
+                <ArrowRight className="w-5 h-5" />
+              </motion.a>
+            </motion.div>
           </motion.div>
         </div>
       </section>
