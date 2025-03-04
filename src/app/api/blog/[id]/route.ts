@@ -1,17 +1,22 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import { ObjectId } from 'mongodb';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
-    console.log('📖 GET /api/blog/[id] - Fetching blog post:', params.id);
+    const id = request.nextUrl.searchParams.get('id');
+    if (!id) {
+      return NextResponse.json(
+        { error: "Blog ID is required" },
+        { status: 400 }
+      );
+    }
+
+    console.log('📖 GET /api/blog - Fetching blog post:', id);
     
     const db = await dbConnect();
     const post = await db.collection('blogs').findOne({ 
-      _id: new ObjectId(params.id) 
+      _id: new ObjectId(id) 
     });
 
     if (!post) {

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 async function fetchPost(id: string) {
   try {
-    const res = await fetch(`http://localhost:3000/api/blog/${id}`, {
+    const res = await fetch(`/api/blog?id=${id}`, {
       cache: 'no-store'
     });
     
