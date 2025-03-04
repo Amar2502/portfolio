@@ -230,16 +230,16 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
   );
 };
 
-interface ImageAttributes {
-  src: string;
-  alt?: string;
-  title?: string;
-  width: string | null;
-  height: string | null;
-  alignment: 'left' | 'center' | 'right';
-  float: 'left' | 'right' | 'none';
-  style: string | null;
-}
+// interface ImageAttributes {
+//   src: string;
+//   alt?: string;
+//   title?: string;
+//   width: string | null;
+//   height: string | null;
+//   alignment: 'left' | 'center' | 'right';
+//   float: 'left' | 'right' | 'none';
+//   style: string | null;
+// }
 
 const ResizableImage = Image.extend({
   addAttributes() {
