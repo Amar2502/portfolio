@@ -168,6 +168,7 @@ export default function PortfolioPage() {
         setFormStatus("idle");
       }, 3000);
     } catch (error) {
+      console.error('Error submitting form:', error);
       setFormStatus("error");
       setTimeout(() => {
         setFormStatus("idle");
@@ -309,7 +310,7 @@ export default function PortfolioPage() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            Hi, I'm{" "}
+            Hi, I&apos;m{" "}
             <motion.span 
               className="text-black dark:text-white"
               whileHover={{ scale: 1.1 }}
@@ -399,9 +400,7 @@ export default function PortfolioPage() {
                 className="space-y-4 sm:space-y-6"
               >
                 <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
-                  I'm a passionate developer with expertise in modern web
-                  development. I enjoy solving complex problems and building
-                  intuitive, efficient applications.
+                  I&apos;m passionate about creating beautiful and functional web applications.
                 </p>
                 <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                   With a strong background in computer science and hands-on
@@ -1030,7 +1029,7 @@ export default function PortfolioPage() {
               transition={{ delay: 0.4, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Let's build something amazing together!
+              Let&apos;s build something amazing together!
             </motion.p>
           </motion.div>
         </div>

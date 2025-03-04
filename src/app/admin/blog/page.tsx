@@ -3,12 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import CodeBlock from '@tiptap/extension-code-block';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
+import NextImage from 'next/image';
 import {
   Bold, Italic, List, ListOrdered, Heading1, Heading2,
   Code, Quote, Link as LinkIcon, Image as ImageIcon,
@@ -175,9 +176,11 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                   </button>
                 ) : (
                   <div className="relative w-full aspect-video mb-4">
-                    <img
+                    <NextImage
                       src={uploadedImageUrl}
                       alt="Uploaded preview"
+                      width={500}
+                      height={300}
                       className="w-full h-full object-contain rounded-lg border border-gray-200 dark:border-gray-700"
                     />
                   </div>
@@ -613,7 +616,19 @@ const MenuBar = ({ editor, onPreview, previewMode }: {
   );
 };
 
-const BlogPreview = ({ data }: { data: any }) => {
+interface BlogData {
+  title: string;
+  excerpt: string;
+  content: string;
+  tags: string;
+  lastSaved?: string;
+}
+
+interface BlogPreviewProps {
+  data: BlogData;
+}
+
+const BlogPreview = ({ data }: BlogPreviewProps) => {
   return (
     <article className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
       <div className="p-8">

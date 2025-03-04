@@ -133,7 +133,7 @@ export default function BlogPostContent({ post }: { post: BlogPost }) {
               className="flex flex-wrap gap-3"
               variants={itemVariants}
             >
-              {post.tags.map((tag, index) => (
+              {post.tags.map((tag) => (
                 <motion.span
                   key={tag}
                   className="px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/30 dark:to-purple-900/30 
