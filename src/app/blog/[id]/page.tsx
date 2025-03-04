@@ -61,6 +61,7 @@ export default async function BlogPost({ params, searchParams }: PageProps) {
     return <BlogPostContent post={post} />;
   } catch (error) {
     console.log("error", error);    
+    console.log("searchParams", searchParams);    
     notFound();
   }
 } 
