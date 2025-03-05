@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const MONGO_URI = process.env.MONGO_URI!; // Ensure this is set in .env
 
+if (!MONGO_URI) {
+  throw new Error("MONGO_URI is not defined in the environment variables");
+}
+
 let isConnected = false; // Track connection status
 
 export async function dbConnect() {
