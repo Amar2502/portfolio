@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
-import BlogModel from "@/models/blog.models"; // Adjust path if needed
-import { dbConnect } from "@/lib/db"; // Ensure correct path
+import BlogModel from "@/models/blog.models";
+import { dbConnect } from "@/lib/db";
 
-// 📌 GET: Fetch all blogs
 export async function GET(req: Request) {
+  console.time('blogFetch');
   try {
-    await dbConnect();
+    // Add a timeout for database connection
+    const connectionPromise = dbConnect();
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database connection timeout')), 5000)
+    );
+
+    await Promise.race([connectionPromise, timeoutPromise]);
 
     const { searchParams } = new URL(req.url);
     const limit = searchParams.get("limit");
@@ -19,16 +25,25 @@ export async function GET(req: Request) {
       }
     }
 
+    // Add query timeout
+    query.maxTimeMS(10000);  // 10 seconds max query time
+
     const blogs = await query;
 
+    console.timeEnd('blogFetch');
     return NextResponse.json(blogs, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: "Error fetching blogs", error }, { status: 500 });
+    console.error('Blog Fetch Error:', error);
+    console.timeEnd('blogFetch');
+    return NextResponse.json({ 
+      message: "Error fetching blogs", 
+      errorDetails: error instanceof Error ? error.message : 'Unknown error' 
+    }, { status: 500 });
   }
 }
 
-// 📌 POST: Create a new blog
 export async function POST(req: Request) {
+  console.time('blogCreate');
   try {
     await dbConnect();
     const { title, content, excerpt, tags } = await req.json();
@@ -40,8 +55,14 @@ export async function POST(req: Request) {
     const newBlog = new BlogModel({ title, content, excerpt, tags });
     await newBlog.save();
 
+    console.timeEnd('blogCreate');
     return NextResponse.json({ message: "Blog created successfully", blog: newBlog }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: "Error creating blog", error }, { status: 500 });
+    console.error('Blog Create Error:', error);
+    console.timeEnd('blogCreate');
+    return NextResponse.json({ 
+      message: "Error creating blog", 
+      errorDetails: error instanceof Error ? error.message : 'Unknown error' 
+    }, { status: 500 });
   }
 }
