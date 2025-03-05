@@ -2,16 +2,23 @@ import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import { ObjectId } from 'mongodb';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request) {
   try {
-    console.log('📖 GET /api/blog/[id] - Fetching blog post:', params.id);
-    
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    console.log('📖 GET /api/blog/[id] - Fetching blog post by ID:', id);
+
+    if (!id) {
+      console.warn('❌ Validation failed: Missing blog post ID');
+      return NextResponse.json(
+        { error: "Blog post ID is required" },
+        { status: 400 }
+      );
+    }
+
     const db = await dbConnect();
     const post = await db.collection('blogs').findOne({ 
-      _id: new ObjectId(params.id) 
+      _id: new ObjectId(id) 
     });
 
     if (!post) {
