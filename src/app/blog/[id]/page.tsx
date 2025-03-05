@@ -86,20 +86,54 @@ export default function BlogPost() {
                 {post.date}
               </div>
               <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
-              <div className="flex flex-wrap gap-2 mb-8">
-                {post.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
-                  >
-                    {tag}
-                  </span>
-                ))}
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <button
+                  onClick={async () => {
+                    if (navigator.share) {
+                      try {
+                        await navigator.share({
+                          title: post.title,
+                          text: post.excerpt,
+                          url: window.location.href,
+                        });
+                      } catch (err) {
+                        if (err instanceof Error && err.name !== 'AbortError') {
+                          console.error('Error sharing:', err);
+                        }
+                      }
+                    } else {
+                      // Fallback for browsers that don't support Web Share API
+                      navigator.clipboard.writeText(window.location.href);
+                      alert('Link copied to clipboard!');
+                    }
+                  }}
+                  className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 shrink-0 cursor-pointer"
+                  aria-label="Share this post"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  <span>Share</span>
+                </button>
               </div>
               <div 
                 className="prose dark:prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
+            </div>
+            <div className="border-t border-gray-200 dark:border-gray-700 p-6">
+              <div className="flex justify-center">
+              </div>
             </div>
           </div>
           <div className="mt-8 text-center">
