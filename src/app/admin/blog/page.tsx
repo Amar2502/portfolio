@@ -3,18 +3,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
+import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import CodeBlock from '@tiptap/extension-code-block';
 import Placeholder from '@tiptap/extension-placeholder';
 import Image from '@tiptap/extension-image';
-import { NodeSelection } from '@tiptap/pm/state';
+import NextImage from 'next/image';
 import {
   Bold, Italic, List, ListOrdered, Heading1, Heading2,
   Code, Quote, Link as LinkIcon, Image as ImageIcon,
-  Undo, Redo, Save, Trash2, Eye, EyeOff, Layout, LayoutList,
-  Calendar, Clock, Hash, Loader2, X, Upload, Link2, Maximize2, Minimize2
+  Undo, Redo, Save, Trash2, Eye, Layout, LayoutList,
+  Calendar, Clock, Hash, Loader2, X, Upload, Link2,
 } from 'lucide-react';
 import Auth from './auth';
 
@@ -89,10 +89,10 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md">
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Add Image</h3>
+        <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Add Image</h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
@@ -101,20 +101,20 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
           </button>
         </div>
 
-        <div className="p-4">
-          <div className="flex space-x-4 mb-4">
+        <div className="p-3 sm:p-4">
+          <div className="flex space-x-2 sm:space-x-4 mb-4">
             <button
               onClick={() => {
                 setTab('url');
                 resetState();
               }}
-              className={`flex-1 py-2 px-4 rounded-md ${
+              className={`flex-1 py-2 px-2 sm:px-4 rounded-md text-sm sm:text-base ${
                 tab === 'url'
                   ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
               }`}
             >
-              <Link2 className="w-4 h-4 inline-block mr-2" />
+              <Link2 className="w-4 h-4 inline-block mr-1 sm:mr-2" />
               URL
             </button>
             <button
@@ -122,13 +122,13 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                 setTab('upload');
                 resetState();
               }}
-              className={`flex-1 py-2 px-4 rounded-md ${
+              className={`flex-1 py-2 px-2 sm:px-4 rounded-md text-sm sm:text-base ${
                 tab === 'upload'
                   ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
               }`}
             >
-              <Upload className="w-4 h-4 inline-block mr-2" />
+              <Upload className="w-4 h-4 inline-block mr-1 sm:mr-2" />
               Upload
             </button>
           </div>
@@ -143,7 +143,7 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                   type="url"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md"
                   placeholder="https://example.com/image.jpg"
                 />
               </div>
@@ -160,14 +160,14 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full py-8 px-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                    className="w-full py-6 sm:py-8 px-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-center hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
                     disabled={isUploading}
                   >
                     {isUploading ? (
-                      <Loader2 className="w-6 h-6 mx-auto animate-spin text-blue-500" />
+                      <Loader2 className="w-5 sm:w-6 h-5 sm:h-6 mx-auto animate-spin text-blue-500" />
                     ) : (
                       <>
-                        <Upload className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+                        <Upload className="w-5 sm:w-6 h-5 sm:h-6 mx-auto mb-2 text-gray-400" />
                         <span className="text-sm text-gray-500 dark:text-gray-400">
                           Click to upload an image
                         </span>
@@ -176,9 +176,11 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                   </button>
                 ) : (
                   <div className="relative w-full aspect-video mb-4">
-                    <img
+                    <NextImage
                       src={uploadedImageUrl}
                       alt="Uploaded preview"
+                      width={500}
+                      height={300}
                       className="w-full h-full object-contain rounded-lg border border-gray-200 dark:border-gray-700"
                     />
                   </div>
@@ -186,7 +188,7 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Width
@@ -195,7 +197,7 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                   type="text"
                   value={width}
                   onChange={(e) => setWidth(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md"
                   placeholder="e.g., 500px or 100%"
                 />
               </div>
@@ -207,7 +209,7 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                   type="text"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-md"
                   placeholder="e.g., 300px"
                 />
               </div>
@@ -216,7 +218,7 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
             {(tab === 'url' || uploadedImageUrl) && (
               <button
                 onClick={tab === 'url' ? handleUrlSubmit : handleConfirmUpload}
-                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
+                className="w-full py-2 px-4 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white rounded-md"
               >
                 Add Image
               </button>
@@ -228,42 +230,73 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
   );
 };
 
-// Custom Resizable Image Extension
+// interface ImageAttributes {
+//   src: string;
+//   alt?: string;
+//   title?: string;
+//   width: string | null;
+//   height: string | null;
+//   alignment: 'left' | 'center' | 'right';
+//   float: 'left' | 'right' | 'none';
+//   style: string | null;
+// }
+
 const ResizableImage = Image.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
-      width: {
+      src: {
         default: null,
-        renderHTML: attributes => {
+        renderHTML: (attributes: { src?: string }) => {
+          if (!attributes.src) return {};
+          return { src: attributes.src };
+        },
+      },
+      alt: {
+        default: null,
+        renderHTML: (attributes: { alt?: string }) => {
+          if (!attributes.alt) return {};
+          return { alt: attributes.alt };
+        },
+      },
+      title: {
+        default: null,
+        renderHTML: (attributes: { title?: string }) => {
+          if (!attributes.title) return {};
+          return { title: attributes.title };
+        },
+      },
+      width: {
+        default: null as string | null,
+        renderHTML: (attributes: { width?: string | null }) => {
           if (!attributes.width) return {};
           return { width: attributes.width };
         },
       },
       height: {
-        default: null,
-        renderHTML: attributes => {
+        default: null as string | null,
+        renderHTML: (attributes: { height?: string | null }) => {
           if (!attributes.height) return {};
           return { height: attributes.height };
         },
       },
       alignment: {
-        default: 'center',
-        renderHTML: attributes => {
+        default: 'center' as const,
+        renderHTML: (attributes: { alignment?: 'left' | 'center' | 'right' }) => {
           const align = attributes.alignment || 'center';
           return { 'data-align': align };
         },
       },
       float: {
-        default: 'none',
-        renderHTML: attributes => {
+        default: 'none' as const,
+        renderHTML: (attributes: { float?: 'left' | 'right' | 'none' }) => {
           const float = attributes.float || 'none';
           return { style: `float: ${float}; margin: ${float === 'left' ? '0 1em 1em 0' : float === 'right' ? '0 0 1em 1em' : '0'}` };
         },
       },
       style: {
-        default: null,
-        renderHTML: attributes => {
+        default: null as string | null,
+        renderHTML: (attributes: { style?: string | null }) => {
           if (!attributes.style) return {};
           return { style: attributes.style };
         },
@@ -414,13 +447,18 @@ const ResizableImage = Image.extend({
   },
 });
 
-const MenuBar = ({ editor, onPreview, previewMode }: { 
-  editor: any; 
+interface MenuBarProps {
+  editor: Editor | null;
   onPreview: () => void;
   previewMode: 'none' | 'side' | 'full';
-}) => {
-  if (!editor) return null;
+}
+
+const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+
+  if (!editor) {
+    return null;
+  }
 
   const addLink = () => {
     const url = window.prompt('Enter URL');
@@ -428,175 +466,177 @@ const MenuBar = ({ editor, onPreview, previewMode }: {
   };
 
   const handleImageAdd = (url: string, width?: string, height?: string) => {
-    const style = [
-      width ? `width: ${width}` : '',
-      height ? `height: ${height}` : ''
-    ].filter(Boolean).join('; ');
-
     editor.chain().focus().setImage({ 
       src: url,
-      HTMLAttributes: {
-        style
-      },
-      float: 'none',
-      alignment: 'center'
+      alt: 'Blog post image',
+      title: width || height ? `Image (${width} × ${height})` : undefined,
+      ...((width || height) && {
+        width,
+        height,
+        alignment: 'center',
+        float: 'none',
+        style: `width: ${width}; height: ${height};`
+      })
     }).run();
   };
 
   return (
     <>
-      <div className="border-b border-gray-200 dark:border-gray-700 p-2 mb-4 flex flex-wrap gap-1 bg-gray-50 dark:bg-gray-800 rounded-t-md sticky top-0 z-10">
-        <div className="flex gap-1">
+      <div className="flex flex-wrap gap-0.5 sm:gap-1 p-1 sm:p-2 overflow-x-auto">
+        <div className="flex gap-0.5 sm:gap-1">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('bold') ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Bold (Ctrl+B)"
           >
-            <Bold className="w-4 h-4" />
+            <Bold className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('italic') ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Italic (Ctrl+I)"
           >
-            <Italic className="w-4 h-4" />
+            <Italic className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-0.5 sm:mx-1" />
 
-        <div className="flex gap-1">
+        <div className="flex gap-0.5 sm:gap-1">
           <button
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('heading', { level: 1 }) ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Heading 1"
           >
-            <Heading1 className="w-4 h-4" />
+            <Heading1 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('heading', { level: 2 }) ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Heading 2"
           >
-            <Heading2 className="w-4 h-4" />
+            <Heading2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-0.5 sm:mx-1" />
 
-        <div className="flex gap-1">
+        <div className="flex gap-0.5 sm:gap-1">
           <button
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('bulletList') ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Bullet List"
           >
-            <List className="w-4 h-4" />
+            <List className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('orderedList') ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Numbered List"
           >
-            <ListOrdered className="w-4 h-4" />
+            <ListOrdered className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-0.5 sm:mx-1" />
 
-        <div className="flex gap-1">
+        <div className="flex gap-0.5 sm:gap-1">
           <button
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('codeBlock') ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Code Block"
           >
-            <Code className="w-4 h-4" />
+            <Code className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('blockquote') ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Quote"
           >
-            <Quote className="w-4 h-4" />
+            <Quote className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-0.5 sm:mx-1" />
 
-        <div className="flex gap-1">
+        <div className="flex gap-0.5 sm:gap-1">
           <button
             onClick={addLink}
-            className={`p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
+            className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
               editor.isActive('link') ? 'bg-gray-200 dark:bg-gray-700' : ''
             }`}
             title="Add Link"
           >
-            <LinkIcon className="w-4 h-4" />
+            <LinkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => setIsImageModalOpen(true)}
-            className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
             title="Add Image"
           >
-            <ImageIcon className="w-4 h-4" />
+            <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-0.5 sm:mx-1" />
 
-        <div className="flex gap-1">
+        <div className="flex gap-0.5 sm:gap-1">
           <button
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().chain().focus().undo().run()}
-            className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"
             title="Undo (Ctrl+Z)"
           >
-            <Undo className="w-4 h-4" />
+            <Undo className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().chain().focus().redo().run()}
-            className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"
             title="Redo (Ctrl+Y)"
           >
-            <Redo className="w-4 h-4" />
+            <Redo className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600" />
+        <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-0.5 sm:mx-1" />
 
-        <div className="flex gap-1">
+        <div className="flex gap-0.5 sm:gap-1">
           <button
             onClick={onPreview}
-            className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center gap-1"
+            className="p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center gap-1"
             title="Toggle Preview Mode"
           >
             {previewMode === 'none' ? (
               <>
-                <Eye className="w-4 h-4" /> <span className="text-sm">Preview</span>
+                <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm hidden sm:inline">Preview</span>
               </>
             ) : previewMode === 'side' ? (
               <>
-                <Layout className="w-4 h-4" /> <span className="text-sm">Split</span>
+                <Layout className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm hidden sm:inline">Split</span>
               </>
             ) : (
               <>
-                <LayoutList className="w-4 h-4" /> <span className="text-sm">Edit</span>
+                <LayoutList className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm hidden sm:inline">Edit</span>
               </>
             )}
           </button>
@@ -611,7 +651,19 @@ const MenuBar = ({ editor, onPreview, previewMode }: {
   );
 };
 
-const BlogPreview = ({ data }: { data: any }) => {
+interface BlogData {
+  title: string;
+  excerpt: string;
+  content: string;
+  tags: string;
+  lastSaved?: string;
+}
+
+interface BlogPreviewProps {
+  data: BlogData;
+}
+
+const BlogPreview = ({ data }: BlogPreviewProps) => {
   return (
     <article className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
       <div className="p-8">
@@ -778,6 +830,8 @@ export default function BlogEditor() {
         router.push("/blog");
       }, 2000);
     } catch (error) {
+      console.log("error", error);
+      
       setStatus("error");
       setIsPublishing(false);
     }
@@ -806,16 +860,16 @@ export default function BlogEditor() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-20">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8 sm:py-20">
+      <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="max-w-7xl mx-auto"
         >
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text mb-4 sm:mb-0">
               Write New Blog Post
             </h1>
             <div className="flex items-center gap-4">
@@ -827,20 +881,20 @@ export default function BlogEditor() {
               {isDraft && (
                 <button
                   onClick={clearDraft}
-                  className="flex items-center gap-2 px-4 py-2 text-red-600 hover:text-red-700 transition-colors"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 text-red-600 hover:text-red-700 transition-colors text-sm sm:text-base"
                   title="Clear draft"
                 >
                   <Trash2 className="w-4 h-4" />
-                  Clear Draft
+                  <span className="hidden sm:inline">Clear Draft</span>
                 </button>
               )}
             </div>
           </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-            <div className="p-6 md:p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-4 sm:p-6 md:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       Title
@@ -851,7 +905,7 @@ export default function BlogEditor() {
                       value={formData.title}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                       placeholder="Enter blog title"
                     />
                   </div>
@@ -866,7 +920,7 @@ export default function BlogEditor() {
                       value={formData.tags}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                       placeholder="React, Next.js, Web Development"
                     />
                   </div>
@@ -882,16 +936,18 @@ export default function BlogEditor() {
                     onChange={handleInputChange}
                     required
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm sm:text-base"
                     placeholder="Enter a brief excerpt"
                   />
                 </div>
 
-                <div className={`grid ${previewMode === 'side' ? 'grid-cols-2 gap-6' : 'grid-cols-1'}`}>
+                <div className={`grid ${previewMode === 'side' ? 'grid-cols-1 lg:grid-cols-2 gap-6' : 'grid-cols-1'}`}>
                   {previewMode !== 'full' && (
                     <div className="border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden">
-                      <MenuBar editor={editor} onPreview={togglePreview} previewMode={previewMode} />
-                      <div className="p-4 bg-white dark:bg-gray-700">
+                      <div className="border-b border-gray-200 dark:border-gray-700 p-2 mb-4 flex flex-wrap gap-1 bg-gray-50 dark:bg-gray-800 rounded-t-md sticky top-0 z-10 overflow-x-auto">
+                        <MenuBar editor={editor} onPreview={togglePreview} previewMode={previewMode} />
+                      </div>
+                      <div className="p-3 sm:p-4 bg-white dark:bg-gray-700">
                         <EditorContent editor={editor} />
                       </div>
                     </div>
@@ -904,12 +960,12 @@ export default function BlogEditor() {
                   )}
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     type="submit"
                     disabled={status === "loading" || !formData.title || !formData.content}
                     onClick={handleSubmit}
-                    className={`flex-1 px-4 py-2 text-white rounded-md transition-colors flex items-center justify-center gap-2 ${
+                    className={`flex-1 px-4 py-2 text-white rounded-md transition-colors flex items-center justify-center gap-2 text-sm sm:text-base ${
                       status === "loading" || !formData.title || !formData.content
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
