@@ -11,13 +11,16 @@ interface MongooseConnection {
   promise: Promise<typeof mongoose> | null;
 }
 
-const globalWithMongoose = global as typeof global & {
-  mongoose?: MongooseConnection;
-};
+// Remove or comment out if not needed
+// const globalWithMongoose = global as typeof global & {
+//   mongoose?: MongooseConnection;
+// };
 
-let cached: MongooseConnection = { conn: null, promise: null };
+const initialConnection: MongooseConnection = { conn: null, promise: null };
 
 export async function dbConnect() {
+  const cached = initialConnection;
+
   if (cached.conn) {
     return cached.conn;
   }
