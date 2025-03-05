@@ -22,7 +22,7 @@ export default function BlogPost() {
   useEffect(() => {
     async function fetchPost() {
       try {
-        const response = await fetch(`/api/blog/${params.id}`);
+        const response = await fetch(`/api/projectbyid/?id=${params.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch blog post');
         }
