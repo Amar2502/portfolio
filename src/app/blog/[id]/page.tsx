@@ -102,12 +102,12 @@ export default function BlogPost() {
             </div>
           </div>
           <div className="mt-8 text-center">
-            <a
+            <Link
               href="/blog"
               className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
             >
               ← Back to all posts
-            </a>
+            </Link>
           </div>
         </motion.div>
       </article>
