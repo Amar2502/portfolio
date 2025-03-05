@@ -16,7 +16,6 @@ import {
   Undo, Redo, Save, Trash2, Eye, Layout, LayoutList,
   Calendar, Clock, Hash, Loader2, X, Upload, Link2,
 } from 'lucide-react';
-import Auth from './auth';
 
 interface ImageModalProps {
   isOpen: boolean;

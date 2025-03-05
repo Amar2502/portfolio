@@ -3,163 +3,182 @@ import { dbConnect } from '@/lib/db';
 import { ObjectId } from 'mongodb';
 
 interface BlogPost {
-  _id?: ObjectId;
+  _id?: ObjectId | string;
   title: string;
   content: string;
   excerpt: string;
   tags: string[];
   date: string;
+  views?: number;
+  lastUpdated?: string;
 }
 
-// GET all blog posts
+// Enhanced error handling utility
+function handleServerError(error: unknown, context: string) {
+  console.error(`❌ Error in ${context}:`, error);
+  
+  return NextResponse.json({ 
+    error: "Internal Server Error", 
+    message: error instanceof Error ? error.message : "An unexpected error occurred" 
+  }, { status: 500 });
+}
+
+// Validation function
+function validateBlogPost(data: any): BlogPost | null {
+  const errors: string[] = [];
+
+  if (!data.title || data.title.trim().length < 3) {
+    errors.push("Title must be at least 3 characters long");
+  }
+
+  if (!data.content || data.content.trim().length < 10) {
+    errors.push("Content must be at least 10 characters long");
+  }
+
+  if (!data.excerpt || data.excerpt.trim().length < 10) {
+    errors.push("Excerpt must be at least 10 characters long");
+  }
+
+  if (!data.tags || !Array.isArray(data.tags) || data.tags.length === 0) {
+    errors.push("At least one tag is required");
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors.join('; '));
+  }
+
+  return {
+    title: data.title.trim(),
+    content: data.content.trim(),
+    excerpt: data.excerpt.trim(),
+    tags: Array.isArray(data.tags) 
+      ? data.tags.map((tag: string) => tag.trim()).filter(Boolean)
+      : data.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean),
+    date: new Date().toISOString(),
+    views: 0
+  };
+}
+
+// GET all blog posts with enhanced filtering and pagination
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const limit = searchParams.get('limit');
-    const limitNum = limit ? parseInt(limit) : undefined;
+    
+    // Pagination parameters
+    const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
+    const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 10;
+    const skip = (page - 1) * limit;
 
-    console.log('📖 GET /api/blog - Fetching blog posts', { limit: limitNum });
-    
+    // Optional filtering
+    const tag = searchParams.get('tag');
+
     const db = await dbConnect();
-    const query = db.collection('blogs').find().sort({ date: -1 });
-    
-    if (limitNum) {
-      query.limit(limitNum);
-    }
-    
-    const posts = await query.toArray();
-    console.log(`✅ Successfully fetched ${posts.length} blog posts`);
-    
-    return NextResponse.json(posts);
+    const query = tag 
+      ? db.collection('blogs').find({ tags: tag }) 
+      : db.collection('blogs').find();
+
+    const totalPosts = await query.count();
+    const posts = await query
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    return NextResponse.json({
+      posts,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalPosts / limit),
+        totalPosts,
+        limit
+      }
+    });
   } catch (error) {
-    console.error('❌ Error fetching blog posts:', error);
-    return NextResponse.json({ error: "Failed to fetch blog posts" }, { status: 500 });
+    return handleServerError(error, 'GET blog posts');
   }
 }
 
-// POST a new blog post
+// POST a new blog post with improved validation
 export async function POST(request: Request) {
-  console.log('📝 POST /api/blog - Creating new blog post');
   try {
     const data = await request.json();
-    console.log('📦 Received data:', { 
-      title: data.title,
-      excerpt: data.excerpt?.substring(0, 50) + '...',
-      contentLength: data.content?.length,
-      tags: data.tags
-    });
-
-    // Validate required fields
-    if (!data.title || !data.content || !data.excerpt || !data.tags) {
-      console.warn('❌ Validation failed: Missing required fields');
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
-    const blogPost: BlogPost = {
-      title: data.title,
-      content: data.content,
-      excerpt: data.excerpt,
-      tags: Array.isArray(data.tags) ? data.tags : data.tags.split(',').map((tag: string) => tag.trim()),
-      date: new Date().toISOString(),
-    };
-    console.log('✅ Blog post object created:', { 
-      title: blogPost.title,
-      tagsCount: blogPost.tags.length,
-      date: blogPost.date
-    });
+    
+    const validatedPost = validateBlogPost(data);
 
     const db = await dbConnect();
-    console.log('✅ Database connection established');
-    
-    const result = await db.collection('blogs').insertOne(blogPost);
-    console.log('📊 Database operation result:', {
-      acknowledged: result.acknowledged,
-      insertedId: result.insertedId
-    });
+    const result = await db.collection<BlogPost>('blogs').insertOne(validatedPost as BlogPost);
 
     if (!result.acknowledged) {
       throw new Error('Failed to insert blog post');
     }
 
-    console.log('✅ Blog post created successfully');
     return NextResponse.json({ 
       message: "Blog post created successfully",
-      post: { ...blogPost, _id: result.insertedId }
-    });
+      post: { ...validatedPost, _id: result.insertedId }
+    }, { status: 201 });
   } catch (error) {
-    console.error('❌ Error creating blog post:', error);
-    const errorMessage = error instanceof Error ? error.message : "Failed to create blog post";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    if (error instanceof Error && error.message.includes('must be at least')) {
+      return NextResponse.json({ 
+        error: "Validation Failed", 
+        details: error.message 
+      }, { status: 400 });
+    }
+    return handleServerError(error, 'POST blog post');
   }
 }
 
-// PUT (update) a blog post
+// PUT (update) a blog post with enhanced validation
 export async function PUT(request: Request) {
-  console.log('✏️ PUT /api/blog - Updating blog post');
   try {
     const data = await request.json();
-    console.log('📦 Received update data:', { 
-      _id: data._id,
-      title: data.title,
-      contentLength: data.content?.length,
-      tags: data.tags
-    });
 
-    if (!data._id || !data.title || !data.content || !data.excerpt) {
-      console.warn('❌ Validation failed: Missing required fields');
+    if (!data._id) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Blog post ID is required" },
         { status: 400 }
       );
     }
 
-    const updateData = {
-      title: data.title,
-      content: data.content,
-      excerpt: data.excerpt,
-      tags: Array.isArray(data.tags) ? data.tags : data.tags.split(',').map((tag: string) => tag.trim()),
-    };
-    console.log('✅ Update object created');
+    const validatedPost = validateBlogPost(data);
 
     const db = await dbConnect();
-    console.log('✅ Database connection established');
     
     const result = await db.collection('blogs').updateOne(
       { _id: new ObjectId(data._id) },
-      { $set: updateData }
+      { 
+        $set: {
+          ...validatedPost,
+          lastUpdated: new Date().toISOString()
+        }
+      }
     );
-    console.log('📊 Update operation result:', {
-      matchedCount: result.matchedCount,
-      modifiedCount: result.modifiedCount
-    });
 
     if (result.matchedCount === 0) {
-      console.warn('❌ Blog post not found for update');
       return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
     }
 
-    console.log('✅ Blog post updated successfully');
-    return NextResponse.json({ message: "Blog post updated successfully" });
+    return NextResponse.json({ 
+      message: "Blog post updated successfully",
+      updatedAt: new Date().toISOString()
+    });
   } catch (error) {
-    console.error('❌ Error updating blog post:', error);
-    const errorMessage = error instanceof Error ? error.message : "Failed to update blog post";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    if (error instanceof Error && error.message.includes('must be at least')) {
+      return NextResponse.json({ 
+        error: "Validation Failed", 
+        details: error.message 
+      }, { status: 400 });
+    }
+    return handleServerError(error, 'PUT blog post');
   }
 }
 
-// DELETE a blog post
+// DELETE a blog post with enhanced error handling
 export async function DELETE(request: Request) {
-  console.log('🗑️ DELETE /api/blog - Deleting blog post');
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
-    console.log('📦 Received delete request for ID:', id);
 
     if (!id) {
-      console.warn('❌ Validation failed: Missing blog post ID');
       return NextResponse.json(
         { error: "Blog post ID is required" },
         { status: 400 }
@@ -167,23 +186,18 @@ export async function DELETE(request: Request) {
     }
 
     const db = await dbConnect();
-    console.log('✅ Database connection established');
     
     const result = await db.collection('blogs').deleteOne({ _id: new ObjectId(id) });
-    console.log('📊 Delete operation result:', {
-      deletedCount: result.deletedCount
-    });
 
     if (result.deletedCount === 0) {
-      console.warn('❌ Blog post not found for deletion');
       return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
     }
 
-    console.log('✅ Blog post deleted successfully');
-    return NextResponse.json({ message: "Blog post deleted successfully" });
+    return NextResponse.json({ 
+      message: "Blog post deleted successfully",
+      deletedAt: new Date().toISOString()
+    });
   } catch (error) {
-    console.error('❌ Error deleting blog post:', error);
-    const errorMessage = error instanceof Error ? error.message : "Failed to delete blog post";
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return handleServerError(error, 'DELETE blog post');
   }
-} 
+}

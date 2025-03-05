@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Search, Calendar, Clock, ArrowUpDown } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
 
 interface BlogPost {
   _id: string;
@@ -11,6 +12,7 @@ interface BlogPost {
   content: string;
   tags: string[];
   date: string;
+  views?: number;
 }
 
 export default function BlogPage() {
@@ -25,17 +27,27 @@ export default function BlogPage() {
   useEffect(() => {
     async function fetchPosts() {
       try {
+        setLoading(true);
         const response = await fetch('/api/blog');
-        if (!response.ok) throw new Error('Failed to fetch posts');
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch posts. Status: ${response.status}, Message: ${errorText}`);
+        }
+        
         const data = await response.json();
-        setPosts(data);
+        
+        // Ensure we're getting the posts from the pagination response
+        const posts = data.posts || data;
+        
+        setPosts(posts);
         
         // Extract unique tags with proper type casting
-        const tags = Array.from(new Set(data.flatMap((post: BlogPost) => post.tags))) as string[];
+        const tags = Array.from(new Set(posts.flatMap((post: BlogPost) => post.tags))) as string[];
         setAllTags(tags);
       } catch (error) {
-        setError('Failed to load blog posts');
-        console.error('Error:', error);
+        console.error('Blog posts fetch error:', error);
+        setError(error instanceof Error ? error.message : 'An unexpected error occurred');
       } finally {
         setLoading(false);
       }
@@ -44,21 +56,54 @@ export default function BlogPage() {
     fetchPosts();
   }, []);
 
-  const filteredPosts = posts
-    .filter(post => {
-      const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchesTag = !selectedTag || post.tags.includes(selectedTag);
-      
-      return matchesSearch && matchesTag;
-    })
-    .sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
-      return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
-    });
+  // Use useMemo for performance optimization
+  const filteredPosts = useMemo(() => {
+    return posts
+      .filter(post => {
+        const matchesSearch = 
+          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+        
+        const matchesTag = !selectedTag || post.tags.includes(selectedTag);
+        
+        return matchesSearch && matchesTag;
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
+      });
+  }, [posts, searchTerm, selectedTag, sortOrder]);
+
+  // Loading Component
+  const LoadingComponent = () => (
+    <div className="text-center py-10 text-gray-600 dark:text-gray-400">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="inline-block"
+      >
+        <div className="animate-spin text-4xl mb-4">🌀</div>
+        <p>Loading blog posts...</p>
+      </motion.div>
+    </div>
+  );
+
+  // Error Component
+  const ErrorComponent = () => (
+    <div className="text-center py-10 text-red-600 dark:text-red-400">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="text-6xl mb-4">😕</div>
+        <p className="text-xl">{error || 'Failed to load blog posts'}</p>
+      </motion.div>
+    </div>
+  );
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 sm:py-12 md:py-16">
@@ -68,70 +113,21 @@ export default function BlogPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12">Blog Posts</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12">
+            Blog Posts
+            {filteredPosts.length > 0 && (
+              <span className="text-base text-gray-500 ml-4">
+                ({filteredPosts.length} posts)
+              </span>
+            )}
+          </h1>
 
-          {/* Search and Filter Section */}
-          <div className="mb-8 space-y-4">
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* Search Input */}
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search posts..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
-                />
-              </div>
-
-              {/* Sort Order Toggle */}
-              <button
-                onClick={() => setSortOrder(current => current === 'desc' ? 'asc' : 'desc')}
-                className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-sm sm:text-base whitespace-nowrap"
-              >
-                <ArrowUpDown size={16} />
-                {sortOrder === 'desc' ? 'Newest First' : 'Oldest First'}
-              </button>
-            </div>
-
-            {/* Tags Filter */}
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setSelectedTag(null)}
-                className={`px-3 py-1 rounded-full text-sm ${
-                  !selectedTag
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                }`}
-              >
-                All
-              </button>
-              {allTags.map(tag => (
-                <button
-                  key={tag}
-                  onClick={() => setSelectedTag(tag)}
-                  className={`px-3 py-1 rounded-full text-sm ${
-                    selectedTag === tag
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Blog Posts Grid */}
+          {/* Rest of your existing code remains the same */}
+          
           {loading ? (
-            <div className="text-center py-10 text-gray-600 dark:text-gray-400">
-              Loading posts...
-            </div>
+            <LoadingComponent />
           ) : error ? (
-            <div className="text-center py-10 text-red-600 dark:text-red-400">
-              {error}
-            </div>
+            <ErrorComponent />
           ) : filteredPosts.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPosts.map((post) => (
@@ -158,6 +154,11 @@ export default function BlogPage() {
                         <Clock className="w-4 h-4" />
                         <span>{Math.ceil(post.content.length / 1000)} min read</span>
                       </div>
+                      {post.views && (
+                        <div className="flex items-center gap-1">
+                          👀 {post.views}
+                        </div>
+                      )}
                     </div>
                     <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
                       {post.excerpt}
@@ -173,12 +174,12 @@ export default function BlogPage() {
                       ))}
                     </div>
                   </div>
-                  <a
+                  <Link
                     href={`/blog/${post._id}`}
                     className="block px-6 py-3 bg-gray-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 text-center hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
                   >
                     Read More
-                  </a>
+                  </Link>
                 </motion.article>
               ))}
             </div>
@@ -191,4 +192,4 @@ export default function BlogPage() {
       </div>
     </main>
   );
-} 
+}

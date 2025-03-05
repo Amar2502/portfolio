@@ -70,10 +70,22 @@ export default function PortfolioPage() {
   useEffect(() => {
     async function fetchRecentPosts() {
       try {
+        setLoading(true);
         const response = await fetch('/api/blog?limit=3');
-        if (!response.ok) throw new Error('Failed to fetch posts');
-        const posts = await response.json() as BlogPost[];
-        console.log("posts", posts);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to fetch posts. Status: ${response.status}, Message: ${errorText}`);
+        }
+        
+        const data = await response.json();
+        
+        // Type guard to ensure we have an array of blog posts
+        if (!Array.isArray(data.posts)) {
+          throw new Error('Invalid response format');
+        }
+  
+        const posts = data.posts as BlogPost[];
         
         setRecentPosts(posts.map((post: BlogPost): FormattedBlogPost => ({
           ...post,
@@ -91,7 +103,7 @@ export default function PortfolioPage() {
         setLoading(false);
       }
     }
-
+  
     fetchRecentPosts();
   }, []);
 
