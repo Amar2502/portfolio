@@ -3,20 +3,39 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useEditor, EditorContent, Editor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
-import CodeBlock from '@tiptap/extension-code-block';
-import Placeholder from '@tiptap/extension-placeholder';
-import Image from '@tiptap/extension-image';
-import NextImage from 'next/image';
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import CodeBlock from "@tiptap/extension-code-block";
+import Placeholder from "@tiptap/extension-placeholder";
+import Image from "@tiptap/extension-image";
+import NextImage from "next/image";
 import {
-  Bold, Italic, List, ListOrdered, Heading1, Heading2,
-  Code, Quote, Link as LinkIcon, Image as ImageIcon,
-  Undo, Redo, Save, Trash2, Eye, Layout, LayoutList,
-  Calendar, Clock, Hash, Loader2, X, Upload, Link2,
-} from 'lucide-react';
-import Auth from "./auth";
+  Bold,
+  Italic,
+  List,
+  ListOrdered,
+  Heading1,
+  Heading2,
+  Code,
+  Quote,
+  Link as LinkIcon,
+  Image as ImageIcon,
+  Undo,
+  Redo,
+  Save,
+  Trash2,
+  Eye,
+  Layout,
+  LayoutList,
+  Calendar,
+  Clock,
+  Hash,
+  Loader2,
+  X,
+  Upload,
+  Link2,
+} from "lucide-react";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -25,12 +44,12 @@ interface ImageModalProps {
 }
 
 const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
-  const [tab, setTab] = useState<'url' | 'upload'>('url');
-  const [url, setUrl] = useState('');
-  const [width, setWidth] = useState('');
-  const [height, setHeight] = useState('');
+  const [tab, setTab] = useState<"url" | "upload">("url");
+  const [url, setUrl] = useState("");
+  const [width, setWidth] = useState("");
+  const [height, setHeight] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUrlSubmit = () => {
@@ -44,23 +63,23 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
     try {
       setIsUploading(true);
       const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await fetch('/api/upload', {
-        method: 'POST',
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
         body: formData,
       });
-      
+
       if (!response.ok) {
-        throw new Error('Failed to upload image');
+        throw new Error("Failed to upload image");
       }
-      
+
       const data = await response.json();
       setUploadedImageUrl(data.url);
       setIsUploading(false);
     } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Failed to upload image. Please try again.');
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
       setIsUploading(false);
     }
   };
@@ -73,10 +92,10 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
   };
 
   const resetState = () => {
-    setUrl('');
-    setWidth('');
-    setHeight('');
-    setUploadedImageUrl('');
+    setUrl("");
+    setWidth("");
+    setHeight("");
+    setUploadedImageUrl("");
     setIsUploading(false);
   };
 
@@ -92,7 +111,9 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md">
         <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">Add Image</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+            Add Image
+          </h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
@@ -105,13 +126,13 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
           <div className="flex space-x-2 sm:space-x-4 mb-4">
             <button
               onClick={() => {
-                setTab('url');
+                setTab("url");
                 resetState();
               }}
               className={`flex-1 py-2 px-2 sm:px-4 rounded-md text-sm sm:text-base ${
-                tab === 'url'
-                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                tab === "url"
+                  ? "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
               }`}
             >
               <Link2 className="w-4 h-4 inline-block mr-1 sm:mr-2" />
@@ -119,13 +140,13 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
             </button>
             <button
               onClick={() => {
-                setTab('upload');
+                setTab("upload");
                 resetState();
               }}
               className={`flex-1 py-2 px-2 sm:px-4 rounded-md text-sm sm:text-base ${
-                tab === 'upload'
-                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                tab === "upload"
+                  ? "bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
               }`}
             >
               <Upload className="w-4 h-4 inline-block mr-1 sm:mr-2" />
@@ -134,7 +155,7 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
           </div>
 
           <div className="space-y-4">
-            {tab === 'url' ? (
+            {tab === "url" ? (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Image URL
@@ -153,7 +174,9 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
                   type="file"
                   ref={fileInputRef}
                   accept="image/*"
-                  onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
+                  onChange={(e) =>
+                    e.target.files?.[0] && handleFileUpload(e.target.files[0])
+                  }
                   className="hidden"
                 />
                 {!uploadedImageUrl ? (
@@ -215,9 +238,9 @@ const ImageModal = ({ isOpen, onClose, onImageAdd }: ImageModalProps) => {
               </div>
             </div>
 
-            {(tab === 'url' || uploadedImageUrl) && (
+            {(tab === "url" || uploadedImageUrl) && (
               <button
-                onClick={tab === 'url' ? handleUrlSubmit : handleConfirmUpload}
+                onClick={tab === "url" ? handleUrlSubmit : handleConfirmUpload}
                 className="w-full py-2 px-4 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white rounded-md"
               >
                 Add Image
@@ -281,17 +304,27 @@ const ResizableImage = Image.extend({
         },
       },
       alignment: {
-        default: 'center' as const,
-        renderHTML: (attributes: { alignment?: 'left' | 'center' | 'right' }) => {
-          const align = attributes.alignment || 'center';
-          return { 'data-align': align };
+        default: "center" as const,
+        renderHTML: (attributes: {
+          alignment?: "left" | "center" | "right";
+        }) => {
+          const align = attributes.alignment || "center";
+          return { "data-align": align };
         },
       },
       float: {
-        default: 'none' as const,
-        renderHTML: (attributes: { float?: 'left' | 'right' | 'none' }) => {
-          const float = attributes.float || 'none';
-          return { style: `float: ${float}; margin: ${float === 'left' ? '0 1em 1em 0' : float === 'right' ? '0 0 1em 1em' : '0'}` };
+        default: "none" as const,
+        renderHTML: (attributes: { float?: "left" | "right" | "none" }) => {
+          const float = attributes.float || "none";
+          return {
+            style: `float: ${float}; margin: ${
+              float === "left"
+                ? "0 1em 1em 0"
+                : float === "right"
+                ? "0 0 1em 1em"
+                : "0"
+            }`,
+          };
         },
       },
       style: {
@@ -305,23 +338,24 @@ const ResizableImage = Image.extend({
   },
   addNodeView() {
     return ({ node, getPos, editor }) => {
-      const container = document.createElement('div');
-      container.style.position = 'relative';
-      container.style.display = 'inline-block';
-      container.className = 'image-resizer-container';
+      const container = document.createElement("div");
+      container.style.position = "relative";
+      container.style.display = "inline-block";
+      container.className = "image-resizer-container";
 
-      const img = document.createElement('img');
+      const img = document.createElement("img");
       img.src = node.attrs.src;
       img.className = this.options.HTMLAttributes.class;
       if (node.attrs.width) img.style.width = node.attrs.width;
       if (node.attrs.height) img.style.height = node.attrs.height;
-      if (node.attrs.float !== 'none') {
+      if (node.attrs.float !== "none") {
         img.style.float = node.attrs.float;
-        img.style.margin = node.attrs.float === 'left' ? '0 1em 1em 0' : '0 0 1em 1em';
+        img.style.margin =
+          node.attrs.float === "left" ? "0 1em 1em 0" : "0 0 1em 1em";
       }
 
-      const controls = document.createElement('div');
-      controls.className = 'image-controls';
+      const controls = document.createElement("div");
+      controls.className = "image-controls";
       controls.style.cssText = `
         position: absolute;
         top: 0;
@@ -335,42 +369,48 @@ const ResizableImage = Image.extend({
       `;
 
       // Alignment controls
-      const alignLeft = document.createElement('button');
-      alignLeft.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 6H3M15 12H3M17 18H3"/></svg>';
-      alignLeft.className = 'control-button';
-      alignLeft.style.cssText = 'padding: 2px; background: none; border: none; color: white; cursor: pointer;';
+      const alignLeft = document.createElement("button");
+      alignLeft.innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 6H3M15 12H3M17 18H3"/></svg>';
+      alignLeft.className = "control-button";
+      alignLeft.style.cssText =
+        "padding: 2px; background: none; border: none; color: white; cursor: pointer;";
       alignLeft.onclick = (e) => {
         e.preventDefault();
-        if (!getPos || typeof getPos !== 'function') return;
-        editor.commands.updateAttributes('image', { float: 'left' });
+        if (!getPos || typeof getPos !== "function") return;
+        editor.commands.updateAttributes("image", { float: "left" });
       };
 
-      const alignCenter = document.createElement('button');
-      alignCenter.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6H6M21 12H3M18 18H6"/></svg>';
-      alignCenter.className = 'control-button';
-      alignCenter.style.cssText = 'padding: 2px; background: none; border: none; color: white; cursor: pointer;';
+      const alignCenter = document.createElement("button");
+      alignCenter.innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6H6M21 12H3M18 18H6"/></svg>';
+      alignCenter.className = "control-button";
+      alignCenter.style.cssText =
+        "padding: 2px; background: none; border: none; color: white; cursor: pointer;";
       alignCenter.onclick = (e) => {
         e.preventDefault();
-        if (!getPos || typeof getPos !== 'function') return;
-        editor.commands.updateAttributes('image', { float: 'none' });
+        if (!getPos || typeof getPos !== "function") return;
+        editor.commands.updateAttributes("image", { float: "none" });
       };
 
-      const alignRight = document.createElement('button');
-      alignRight.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6H21M3 12H15M3 18H17"/></svg>';
-      alignRight.className = 'control-button';
-      alignRight.style.cssText = 'padding: 2px; background: none; border: none; color: white; cursor: pointer;';
+      const alignRight = document.createElement("button");
+      alignRight.innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6H21M3 12H15M3 18H17"/></svg>';
+      alignRight.className = "control-button";
+      alignRight.style.cssText =
+        "padding: 2px; background: none; border: none; color: white; cursor: pointer;";
       alignRight.onclick = (e) => {
         e.preventDefault();
-        if (!getPos || typeof getPos !== 'function') return;
-        editor.commands.updateAttributes('image', { float: 'right' });
+        if (!getPos || typeof getPos !== "function") return;
+        editor.commands.updateAttributes("image", { float: "right" });
       };
 
       controls.appendChild(alignLeft);
       controls.appendChild(alignCenter);
       controls.appendChild(alignRight);
 
-      const resizeHandle = document.createElement('div');
-      resizeHandle.className = 'resize-handle';
+      const resizeHandle = document.createElement("div");
+      resizeHandle.className = "resize-handle";
       resizeHandle.style.cssText = `
         position: absolute;
         bottom: 0;
@@ -387,7 +427,10 @@ const ResizableImage = Image.extend({
       container.appendChild(controls);
       container.appendChild(resizeHandle);
 
-      let startX: number, startY: number, startWidth: number, startHeight: number;
+      let startX: number,
+        startY: number,
+        startWidth: number,
+        startHeight: number;
 
       const startResize = (e: MouseEvent) => {
         e.preventDefault();
@@ -395,52 +438,52 @@ const ResizableImage = Image.extend({
         startY = e.clientY;
         startWidth = img.offsetWidth;
         startHeight = img.offsetHeight;
-        document.addEventListener('mousemove', resize);
-        document.addEventListener('mouseup', stopResize);
+        document.addEventListener("mousemove", resize);
+        document.addEventListener("mouseup", stopResize);
       };
 
       const resize = (e: MouseEvent) => {
-        if (!getPos || typeof getPos !== 'function') return;
-        
+        if (!getPos || typeof getPos !== "function") return;
+
         const newWidth = startWidth + (e.clientX - startX);
         const newHeight = startHeight + (e.clientY - startY);
-        
+
         const widthInPx = `${newWidth}px`;
         const heightInPx = `${newHeight}px`;
-        
+
         img.style.width = widthInPx;
         img.style.height = heightInPx;
-        
-        editor.commands.updateAttributes('image', {
+
+        editor.commands.updateAttributes("image", {
           width: widthInPx,
           height: heightInPx,
-          style: `width: ${widthInPx}; height: ${heightInPx};`
+          style: `width: ${widthInPx}; height: ${heightInPx};`,
         });
       };
 
       const stopResize = () => {
-        document.removeEventListener('mousemove', resize);
-        document.removeEventListener('mouseup', stopResize);
+        document.removeEventListener("mousemove", resize);
+        document.removeEventListener("mouseup", stopResize);
       };
 
-      resizeHandle.addEventListener('mousedown', startResize);
+      resizeHandle.addEventListener("mousedown", startResize);
 
       // Show/hide controls and resize handle on hover
-      container.addEventListener('mouseenter', () => {
-        controls.style.display = 'flex';
-        resizeHandle.style.display = 'block';
+      container.addEventListener("mouseenter", () => {
+        controls.style.display = "flex";
+        resizeHandle.style.display = "block";
       });
-      container.addEventListener('mouseleave', () => {
-        controls.style.display = 'none';
-        resizeHandle.style.display = 'none';
+      container.addEventListener("mouseleave", () => {
+        controls.style.display = "none";
+        resizeHandle.style.display = "none";
       });
 
       return {
         dom: container,
         destroy: () => {
-          resizeHandle.removeEventListener('mousedown', startResize);
-          document.removeEventListener('mousemove', resize);
-          document.removeEventListener('mouseup', stopResize);
+          resizeHandle.removeEventListener("mousedown", startResize);
+          document.removeEventListener("mousemove", resize);
+          document.removeEventListener("mouseup", stopResize);
         },
       };
     };
@@ -450,7 +493,7 @@ const ResizableImage = Image.extend({
 interface MenuBarProps {
   editor: Editor | null;
   onPreview: () => void;
-  previewMode: 'none' | 'side' | 'full';
+  previewMode: "none" | "side" | "full";
 }
 
 const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
@@ -461,23 +504,27 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
   }
 
   const addLink = () => {
-    const url = window.prompt('Enter URL');
+    const url = window.prompt("Enter URL");
     if (url) editor.chain().focus().setLink({ href: url }).run();
   };
 
   const handleImageAdd = (url: string, width?: string, height?: string) => {
-    editor.chain().focus().setImage({ 
-      src: url,
-      alt: 'Blog post image',
-      title: width || height ? `Image (${width} × ${height})` : undefined,
-      ...((width || height) && {
-        width,
-        height,
-        alignment: 'center',
-        float: 'none',
-        style: `width: ${width}; height: ${height};`
+    editor
+      .chain()
+      .focus()
+      .setImage({
+        src: url,
+        alt: "Blog post image",
+        title: width || height ? `Image (${width} × ${height})` : undefined,
+        ...((width || height) && {
+          width,
+          height,
+          alignment: "center",
+          float: "none",
+          style: `width: ${width}; height: ${height};`,
+        }),
       })
-    }).run();
+      .run();
   };
 
   return (
@@ -487,7 +534,7 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('bold') ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("bold") ? "bg-gray-200 dark:bg-gray-700" : ""
             }`}
             title="Bold (Ctrl+B)"
           >
@@ -496,7 +543,7 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('italic') ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("italic") ? "bg-gray-200 dark:bg-gray-700" : ""
             }`}
             title="Italic (Ctrl+I)"
           >
@@ -508,18 +555,26 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
 
         <div className="flex gap-0.5 sm:gap-1">
           <button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 1 }).run()
+            }
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('heading', { level: 1 }) ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("heading", { level: 1 })
+                ? "bg-gray-200 dark:bg-gray-700"
+                : ""
             }`}
             title="Heading 1"
           >
             <Heading1 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           <button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            }
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('heading', { level: 2 }) ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("heading", { level: 2 })
+                ? "bg-gray-200 dark:bg-gray-700"
+                : ""
             }`}
             title="Heading 2"
           >
@@ -533,7 +588,9 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
           <button
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('bulletList') ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("bulletList")
+                ? "bg-gray-200 dark:bg-gray-700"
+                : ""
             }`}
             title="Bullet List"
           >
@@ -542,7 +599,9 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
           <button
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('orderedList') ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("orderedList")
+                ? "bg-gray-200 dark:bg-gray-700"
+                : ""
             }`}
             title="Numbered List"
           >
@@ -556,7 +615,7 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
           <button
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('codeBlock') ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("codeBlock") ? "bg-gray-200 dark:bg-gray-700" : ""
             }`}
             title="Code Block"
           >
@@ -565,7 +624,9 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
           <button
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('blockquote') ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("blockquote")
+                ? "bg-gray-200 dark:bg-gray-700"
+                : ""
             }`}
             title="Quote"
           >
@@ -579,7 +640,7 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
           <button
             onClick={addLink}
             className={`p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 ${
-              editor.isActive('link') ? 'bg-gray-200 dark:bg-gray-700' : ''
+              editor.isActive("link") ? "bg-gray-200 dark:bg-gray-700" : ""
             }`}
             title="Add Link"
           >
@@ -623,20 +684,26 @@ const MenuBar = ({ editor, onPreview, previewMode }: MenuBarProps) => {
             className="p-1.5 sm:p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center gap-1"
             title="Toggle Preview Mode"
           >
-            {previewMode === 'none' ? (
+            {previewMode === "none" ? (
               <>
                 <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="text-xs sm:text-sm hidden sm:inline">Preview</span>
+                <span className="text-xs sm:text-sm hidden sm:inline">
+                  Preview
+                </span>
               </>
-            ) : previewMode === 'side' ? (
+            ) : previewMode === "side" ? (
               <>
                 <Layout className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="text-xs sm:text-sm hidden sm:inline">Split</span>
+                <span className="text-xs sm:text-sm hidden sm:inline">
+                  Split
+                </span>
               </>
             ) : (
               <>
                 <LayoutList className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="text-xs sm:text-sm hidden sm:inline">Edit</span>
+                <span className="text-xs sm:text-sm hidden sm:inline">
+                  Edit
+                </span>
               </>
             )}
           </button>
@@ -668,7 +735,7 @@ const BlogPreview = ({ data }: BlogPreviewProps) => {
     <article className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
       <div className="p-8">
         <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
-        
+
         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-6">
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
@@ -699,26 +766,24 @@ const BlogPreview = ({ data }: BlogPreviewProps) => {
 
 export default function BlogEditor() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
     content: "",
     tags: "",
   });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [previewMode, setPreviewMode] = useState<'none' | 'side' | 'full'>('none');
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [previewMode, setPreviewMode] = useState<"none" | "side" | "full">(
+    "none"
+  );
   const [isDraft, setIsDraft] = useState(false);
-  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishError, setPublishError] = useState<string | null>(null);
 
   useEffect(() => {
-    const auth = localStorage.getItem('blog_admin_auth');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-    }
-
     // Load draft if exists
-    const savedDraft = localStorage.getItem('blog_draft');
+    const savedDraft = localStorage.getItem("blog_draft");
     if (savedDraft) {
       const parsedDraft = JSON.parse(savedDraft);
       setFormData(parsedDraft);
@@ -732,23 +797,24 @@ export default function BlogEditor() {
 
     const saveDraft = () => {
       if (formData.title || formData.content) {
-        localStorage.setItem('blog_draft', JSON.stringify({
-          ...formData,
-          lastSaved: new Date().toISOString()
-        }));
+        localStorage.setItem(
+          "blog_draft",
+          JSON.stringify({
+            ...formData,
+            lastSaved: new Date().toISOString(),
+          })
+        );
         setIsDraft(true);
       }
     };
 
     // Debounce auto-save to prevent too frequent saves
-    if (!isPublishing) {
-      saveTimeout = setTimeout(saveDraft, 2000);
-    }
+    saveTimeout = setTimeout(saveDraft, 2000);
 
     return () => {
       clearTimeout(saveTimeout);
     };
-  }, [formData, isPublishing]);
+  }, [formData]);
 
   const editor = useEditor({
     extensions: [
@@ -756,40 +822,47 @@ export default function BlogEditor() {
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-blue-500 hover:text-blue-600 underline',
+          class: "text-blue-500 hover:text-blue-600 underline",
         },
       }),
       CodeBlock.configure({
         HTMLAttributes: {
-          class: 'bg-gray-100 dark:bg-gray-800 rounded-md p-4 font-mono text-sm',
+          class:
+            "bg-gray-100 dark:bg-gray-800 rounded-md p-4 font-mono text-sm",
         },
       }),
-      ResizableImage.configure({
+      Image.configure({
         HTMLAttributes: {
-          class: 'rounded-lg max-w-full',
+          class: "rounded-lg max-w-full",
         },
       }),
       Placeholder.configure({
-        placeholder: 'Write your blog post content here...',
+        placeholder: "Write your blog post content here...",
       }),
     ],
     content: formData.content,
     onUpdate: ({ editor }) => {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         content: editor.getHTML(),
       }));
+      // Clear any previous publish errors when content changes
+      setPublishError(null);
     },
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert max-w-none min-h-[300px] focus:outline-none',
+        class:
+          "prose dark:prose-invert max-w-none min-h-[300px] focus:outline-none p-4",
       },
     },
   });
 
   const clearDraft = () => {
-    if (window.confirm('Are you sure you want to clear the draft? This cannot be undone.')) {
-      localStorage.removeItem('blog_draft');
+    const confirmClear = confirm(
+      "Are you sure you want to clear the draft? This cannot be undone."
+    );
+    if (confirmClear) {
+      localStorage.removeItem("blog_draft");
       setFormData({ title: "", excerpt: "", content: "", tags: "" });
       editor?.commands.setContent("");
       setIsDraft(false);
@@ -798,16 +871,35 @@ export default function BlogEditor() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Confirm before publishing
-    if (!window.confirm('Are you sure you want to publish this blog post?')) {
+
+    // Validate form
+    if (!formData.title.trim()) {
+      setPublishError("Title is required");
+      return;
+    }
+    if (!formData.content.trim()) {
+      setPublishError("Content is required");
+      return;
+    }
+    if (!formData.tags.trim()) {
+      setPublishError("At least one tag is required");
       return;
     }
 
-    setIsPublishing(true);
+    // Confirm before publishing
+    const confirmPublish = confirm(
+      "Are you sure you want to publish this blog post?"
+    );
+    if (!confirmPublish) {
+      return;
+    }
+
     setStatus("loading");
+    setPublishError(null);
 
     try {
+      console.log("formData from admin page", formData);
+      
       const response = await fetch("/api/blog", {
         method: "POST",
         headers: {
@@ -815,25 +907,31 @@ export default function BlogEditor() {
         },
         body: JSON.stringify({
           ...formData,
-          tags: formData.tags.split(",").map(tag => tag.trim()),
+          tags: formData.tags.split(",").map((tag) => tag.trim()),
           date: new Date().toISOString(),
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to create blog post");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create blog post");
+      }
 
       setStatus("success");
-      localStorage.removeItem('blog_draft');
+      localStorage.removeItem("blog_draft");
       setIsDraft(false);
-      
+
+      // Redirect after a short delay
       setTimeout(() => {
         router.push("/blog");
-      }, 2000);
+      }, 1500);
     } catch (error) {
-      console.log("error", error);
-      
+      console.error("Publish error:", error);
+
       setStatus("error");
-      setIsPublishing(false);
+      setPublishError(
+        error instanceof Error ? error.message : "An unexpected error occurred"
+      );
     }
   };
 
@@ -845,19 +943,17 @@ export default function BlogEditor() {
       ...prev,
       [name]: value,
     }));
+    // Clear any previous publish errors
+    setPublishError(null);
   };
 
   const togglePreview = () => {
-    setPreviewMode(current => {
-      if (current === 'none') return 'side';
-      if (current === 'side') return 'full';
-      return 'none';
+    setPreviewMode((current) => {
+      if (current === "none") return "side";
+      if (current === "side") return "full";
+      return "none";
     });
   };
-
-  if (!isAuthenticated) {
-    return <Auth onAuth={setIsAuthenticated} />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8 sm:py-20">
@@ -874,12 +970,11 @@ export default function BlogEditor() {
             </h1>
             <div className="flex items-center gap-4">
               {isDraft && (
-                <span className="text-sm text-gray-500">
-                  Draft auto-saved
-                </span>
+                <span className="text-sm text-gray-500">Draft auto-saved</span>
               )}
               {isDraft && (
                 <button
+                  type="button"
                   onClick={clearDraft}
                   className="flex items-center gap-2 px-3 sm:px-4 py-2 text-red-600 hover:text-red-700 transition-colors text-sm sm:text-base"
                   title="Clear draft"
@@ -894,6 +989,12 @@ export default function BlogEditor() {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
             <div className="p-4 sm:p-6 md:p-8">
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                {publishError && (
+                  <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-md p-3 text-red-700 dark:text-red-300 text-sm">
+                    {publishError}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -941,19 +1042,29 @@ export default function BlogEditor() {
                   />
                 </div>
 
-                <div className={`grid ${previewMode === 'side' ? 'grid-cols-1 lg:grid-cols-2 gap-6' : 'grid-cols-1'}`}>
-                  {previewMode !== 'full' && (
+                <div
+                  className={`grid ${
+                    previewMode === "side"
+                      ? "grid-cols-1 lg:grid-cols-2 gap-6"
+                      : "grid-cols-1"
+                  }`}
+                >
+                  {previewMode !== "full" && (
                     <div className="border border-gray-300 dark:border-gray-600 rounded-md overflow-hidden">
                       <div className="border-b border-gray-200 dark:border-gray-700 p-2 mb-4 flex flex-wrap gap-1 bg-gray-50 dark:bg-gray-800 rounded-t-md sticky top-0 z-10 overflow-x-auto">
-                        <MenuBar editor={editor} onPreview={togglePreview} previewMode={previewMode} />
+                        <MenuBar
+                          editor={editor}
+                          onPreview={togglePreview}
+                          previewMode={previewMode}
+                        />
                       </div>
-                      <div className="p-3 sm:p-4 bg-white dark:bg-gray-700">
+                      <div>
                         <EditorContent editor={editor} />
                       </div>
                     </div>
                   )}
-                  
-                  {previewMode !== 'none' && (
+
+                  {previewMode !== "none" && (
                     <div className="preview-container overflow-auto">
                       <BlogPreview data={formData} />
                     </div>
@@ -963,10 +1074,15 @@ export default function BlogEditor() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     type="submit"
-                    disabled={status === "loading" || !formData.title || !formData.content}
-                    onClick={handleSubmit}
+                    disabled={
+                      status === "loading" ||
+                      !formData.title ||
+                      !formData.content
+                    }
                     className={`flex-1 px-4 py-2 text-white rounded-md transition-colors flex items-center justify-center gap-2 text-sm sm:text-base ${
-                      status === "loading" || !formData.title || !formData.content
+                      status === "loading" ||
+                      !formData.title ||
+                      !formData.content
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     }`}
@@ -994,15 +1110,6 @@ export default function BlogEditor() {
                     Blog post published successfully! Redirecting...
                   </motion.p>
                 )}
-                {status === "error" && (
-                  <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 text-red-600 dark:text-red-400 text-center font-medium"
-                  >
-                    Failed to publish blog post. Please try again.
-                  </motion.p>
-                )}
               </form>
             </div>
           </div>
@@ -1010,4 +1117,4 @@ export default function BlogEditor() {
       </div>
     </div>
   );
-} 
+}

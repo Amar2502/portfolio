@@ -1,70 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { dbConnect } from '@/lib/db';
-import { ObjectId } from 'mongodb';
+import { NextResponse } from "next/server";
+import BlogModel from "@/models/blog.models"; // Ensure correct path
+import { dbConnect } from "@/lib/db";
+import { URL } from "url";
 
-interface BlogPost {
-  _id?: ObjectId | string;
-  title: string;
-  content: string;
-  excerpt: string;
-  tags: string[];
-  date: string;
-  views?: number;
-}
-
-export async function GET(request: NextRequest) {
+export async function GET(req: Request) {
   try {
-    const id = request.nextUrl.searchParams.get('id');
-    
-    // Validate ID format
+    await dbConnect();
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
     if (!id) {
-      return NextResponse.json(
-        { error: "Blog post ID is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Blog ID is required" }, { status: 400 });
     }
 
-    // Validate ObjectId
-    try {
-      new ObjectId(id);
-    } catch (idError) {
-      return NextResponse.json(
-        { error: `Invalid blog post ID format - ${idError}` },
-        { status: 400 }
-      );
+    const blog = await BlogModel.findById(id);
+    if (!blog) {
+      return NextResponse.json({ message: "Blog not found" }, { status: 404 });
     }
 
-    console.log(`📖 GET /api/blog - Fetching blog post: ${id}`);
-    
-    const db = await dbConnect();
-    const post = await db.collection<BlogPost>('blogs').findOne({ 
-      _id: new ObjectId(id) 
-    });
-
-    if (!post) {
-      console.warn(`❌ Blog post not found: ${id}`);
-      return NextResponse.json(
-        { error: "Blog post not found" },
-        { status: 404 }
-      );
-    }
-
-    // Increment view count (optional)
-    await db.collection<BlogPost>('blogs').updateOne(
-      { _id: new ObjectId(id) },
-      { $inc: { views: 1 } }
-    );
-
-    console.log(`✅ Successfully fetched blog post: ${id}`);
-    return NextResponse.json(post);
+    return NextResponse.json(blog, { status: 200 });
   } catch (error) {
-    console.error('❌ Error fetching blog post:', error);
-    return NextResponse.json(
-      { 
-        error: "Failed to fetch blog post", 
-        details: error instanceof Error ? error.message : 'Unknown error' 
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Error fetching blog", error }, { status: 500 });
   }
 }

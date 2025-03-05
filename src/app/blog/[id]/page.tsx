@@ -20,7 +20,7 @@ export default function BlogPost() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  useEffect(() => {    
     async function fetchPost() {
       try {
         const response = await fetch(`/api/projectbyid/?id=${params.id}`);

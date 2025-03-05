@@ -1,22 +1,20 @@
-import { MongoClient } from 'mongodb';
+import mongoose from "mongoose";
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your MongoDB URI to .env.local');
-}
+const MONGO_URI = process.env.MONGO_URI!; // Ensure this is set in .env
 
-let client: MongoClient | null = null;
+let isConnected = false; // Track connection status
 
 export async function dbConnect() {
-  if (client) {
-    return client.db();
+  if (isConnected) {
+    console.log("Using existing database connection");
+    return;
   }
 
   try {
-    client = new MongoClient(process.env.MONGODB_URI!);
-    await client.connect();
-    return client.db();
+    const connection = await mongoose.connect(MONGO_URI);
+    isConnected = connection.connections[0].readyState === 1;
+    console.log("MongoDB Connected");
   } catch (error) {
-    console.error('Failed to connect to database:', error);
-    throw new Error('Database connection failed');
+    console.error("MongoDB Connection Error:", error);
   }
-} 
+}

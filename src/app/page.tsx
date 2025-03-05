@@ -24,13 +24,19 @@ interface BlogPost {
   date: string;
   description: string;
   tags: string[];
-  // Add other fields that exist in your blog post data
+  excerpt: string;
 }
 
 interface FormattedBlogPost extends Omit<BlogPost, 'date'> {
   date: string;
   slug: string;
   tags: string[];
+}
+
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
 }
 
 export default function PortfolioPage() {
@@ -41,7 +47,7 @@ export default function PortfolioPage() {
   const [formStatus, setFormStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
@@ -68,25 +74,24 @@ export default function PortfolioPage() {
   }, []);
 
   useEffect(() => {
-    async function fetchRecentPosts() {
+    const fetchRecentPosts = async () => {
       try {
         setLoading(true);
         const response = await fetch('/api/blog?limit=3');
-        
+
         if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`Failed to fetch posts. Status: ${response.status}, Message: ${errorText}`);
         }
-        
+
         const data = await response.json();
-        
-        // Type guard to ensure we have an array of blog posts
-        if (!Array.isArray(data.posts)) {
+
+        if (!Array.isArray(data)) {
           throw new Error('Invalid response format');
         }
-  
-        const posts = data.posts as BlogPost[];
-        
+
+        const posts = data as BlogPost[];
+
         setRecentPosts(posts.map((post: BlogPost): FormattedBlogPost => ({
           ...post,
           date: new Date(post.date).toLocaleDateString('en-US', {
@@ -102,10 +107,11 @@ export default function PortfolioPage() {
       } finally {
         setLoading(false);
       }
-    }
-  
+    };
+
     fetchRecentPosts();
   }, []);
+    
 
   // Navigation items
   const navItems = [
@@ -201,7 +207,7 @@ export default function PortfolioPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData((prev: FormData) => ({
       ...prev,
       [name]: value,
     }));
