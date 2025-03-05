@@ -1,3 +1,5 @@
+//app/admin/blog/page.tsx
+
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -793,8 +795,6 @@ export default function BlogEditor() {
 
   // Auto-save draft functionality
   useEffect(() => {
-    let saveTimeout: NodeJS.Timeout;
-
     const saveDraft = () => {
       if (formData.title || formData.content) {
         localStorage.setItem(
@@ -808,8 +808,7 @@ export default function BlogEditor() {
       }
     };
 
-    // Debounce auto-save to prevent too frequent saves
-    saveTimeout = setTimeout(saveDraft, 2000);
+    const saveTimeout: NodeJS.Timeout = setTimeout(saveDraft, 2000);
 
     return () => {
       clearTimeout(saveTimeout);
@@ -831,7 +830,7 @@ export default function BlogEditor() {
             "bg-gray-100 dark:bg-gray-800 rounded-md p-4 font-mono text-sm",
         },
       }),
-      Image.configure({
+      ResizableImage.configure({
         HTMLAttributes: {
           class: "rounded-lg max-w-full",
         },
