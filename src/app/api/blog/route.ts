@@ -24,7 +24,7 @@ function handleServerError(error: unknown, context: string) {
 }
 
 // Validation function
-function validateBlogPost(data: any): BlogPost | null {
+function validateBlogPost(data: BlogPost): BlogPost | null {
   const errors: string[] = [];
 
   if (!data.title || data.title.trim().length < 3) {
@@ -53,7 +53,7 @@ function validateBlogPost(data: any): BlogPost | null {
     excerpt: data.excerpt.trim(),
     tags: Array.isArray(data.tags) 
       ? data.tags.map((tag: string) => tag.trim()).filter(Boolean)
-      : data.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean),
+      : [],
     date: new Date().toISOString(),
     views: 0
   };

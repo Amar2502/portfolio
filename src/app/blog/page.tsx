@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion";
-import { Search, Calendar, Clock, ArrowUpDown } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
@@ -22,7 +22,6 @@ export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [allTags, setAllTags] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -41,10 +40,6 @@ export default function BlogPage() {
         const posts = data.posts || data;
         
         setPosts(posts);
-        
-        // Extract unique tags with proper type casting
-        const tags = Array.from(new Set(posts.flatMap((post: BlogPost) => post.tags))) as string[];
-        setAllTags(tags);
       } catch (error) {
         console.error('Blog posts fetch error:', error);
         setError(error instanceof Error ? error.message : 'An unexpected error occurred');
@@ -122,8 +117,44 @@ export default function BlogPage() {
             )}
           </h1>
 
-          {/* Rest of your existing code remains the same */}
-          
+          {/* Search and Filter Controls */}
+          <div className="mb-8 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Search Input */}
+              <div className="flex-1">
+                <input
+                  type="text"
+                  placeholder="Search posts..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              {/* Tag Filter Dropdown */}
+              <div className="w-full sm:w-48">
+                <select
+                  value={selectedTag || ''}
+                  onChange={(e) => setSelectedTag(e.target.value || null)}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">All Tags</option>
+                  {Array.from(new Set(posts.flatMap(post => post.tags))).map(tag => (
+                    <option key={tag} value={tag}>{tag}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sort Order Toggle */}
+              <button
+                onClick={() => setSortOrder(current => current === 'desc' ? 'asc' : 'desc')}
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Sort {sortOrder === 'desc' ? '↓' : '↑'}
+              </button>
+            </div>
+          </div>
+
           {loading ? (
             <LoadingComponent />
           ) : error ? (

@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
       new ObjectId(id);
     } catch (idError) {
       return NextResponse.json(
-        { error: "Invalid blog post ID format" },
+        { error: `Invalid blog post ID format - ${idError}` },
         { status: 400 }
       );
     }
