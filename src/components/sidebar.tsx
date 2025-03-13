@@ -23,9 +23,6 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-// Define scroll direction type
-type ScrollDirection = 'left' | 'right';
-
 const navItems: NavItem[] = [
   { name: "Home", href: "/", icon: Home },
   { name: "About", href: "/about", icon: User },
@@ -42,59 +39,50 @@ const Sidebar = () => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const footerNavRef = useRef<HTMLDivElement | null>(null);
-  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('left');
-  const [isScrolling, setIsScrolling] = useState<boolean>(true);
 
   // Use this effect to handle theme-related rendering
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Auto-scrolling effect for footer navigation
+  // Effect to scroll to the active item when the pathname changes
   useEffect(() => {
-    if (!footerNavRef.current || !isScrolling) return;
+    if (!footerNavRef.current) return;
     
-    const scrollContainer = footerNavRef.current;
-    let animationFrameId: number;
-    const scrollSpeed = 0.5; // Speed in pixels per frame
+    // Find the active item index
+    const activeIndex = navItems.findIndex(item => item.href === pathname);
+    if (activeIndex === -1) return;
     
-    const scroll = (): void => {
-      if (!scrollContainer) return;
-      
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
-      
-      // Change direction at the edges
-      if (scrollLeft <= 0) {
-        setScrollDirection('right');
-      } else if (scrollLeft >= scrollWidth - clientWidth) {
-        setScrollDirection('left');
-      }
-      
-      // Apply scrolling based on direction
-      if (scrollDirection === 'left') {
-        scrollContainer.scrollLeft -= scrollSpeed;
-      } else {
-        scrollContainer.scrollLeft += scrollSpeed;
-      }
-      
-      animationFrameId = requestAnimationFrame(scroll);
-    };
+    // Find all nav items in the footer
+    const footerItems = footerNavRef.current.querySelectorAll('[data-nav-item]');
+    if (!footerItems.length || !footerItems[activeIndex]) return;
     
-    animationFrameId = requestAnimationFrame(scroll);
+    // Get the active item element
+    const activeItem = footerItems[activeIndex] as HTMLElement;
     
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [scrollDirection, isScrolling]);
-
-  // Function to pause/resume scrolling when touched
-  const handleTouchStart = (): void => {
-    setIsScrolling(false);
-  };
-  
-  const handleTouchEnd = (): void => {
-    setIsScrolling(true);
-  };
+    // Calculate whether the item is fully visible
+    const container = footerNavRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = activeItem.getBoundingClientRect();
+    
+    // Check if the item is partially or fully outside the visible area
+    const isItemPartiallyHidden = 
+      itemRect.left < containerRect.left || 
+      itemRect.right > containerRect.right;
+    
+    if (isItemPartiallyHidden) {
+      // Calculate the scroll position to center the active item
+      const scrollLeft = activeItem.offsetLeft - 
+        (container.clientWidth / 2) + 
+        (activeItem.offsetWidth / 2);
+      
+      // Smooth scroll to the position
+      container.scrollTo({
+        left: scrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  }, [pathname]);
 
   const toggleSidebar = (): void => {
     setCollapsed(!collapsed);
@@ -123,18 +111,17 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* Mobile/Tablet Footer Navigation Bar - Auto-scrolling */}
+      {/* Mobile/Tablet Footer Navigation Bar - Smart scrolling */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t z-40">
         <div 
           ref={footerNavRef} 
-          className="overflow-x-auto scrollbar-hide" 
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          className="overflow-x-auto scrollbar-hide"
         >
           <div className="flex items-center px-2 py-2 gap-4" style={{ minWidth: "max-content" }}>
             {navItems.map((item) => (
               <Link href={item.href} key={item.href} className="flex-shrink-0">
                 <div
+                  data-nav-item
                   className={cn(
                     "flex flex-col items-center justify-center px-3 py-2 rounded-lg transition-colors",
                     pathname === item.href
