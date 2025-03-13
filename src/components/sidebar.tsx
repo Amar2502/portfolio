@@ -42,8 +42,6 @@ const Sidebar = () => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const footerNavRef = useRef<HTMLDivElement | null>(null);
-  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('left');
-  const [isScrolling, setIsScrolling] = useState<boolean>(true);
   const [showLeftIndicator, setShowLeftIndicator] = useState<boolean>(false);
   const [showRightIndicator, setShowRightIndicator] = useState<boolean>(true);
 
@@ -65,46 +63,6 @@ const Sidebar = () => {
     setShowRightIndicator(scrollLeft < scrollWidth - clientWidth - 10);
   };
 
-  // Auto-scrolling effect for footer navigation
-  useEffect(() => {
-    if (!footerNavRef.current || !isScrolling) return;
-    
-    const scrollContainer = footerNavRef.current;
-    let animationFrameId: number;
-    const scrollSpeed = 0.5; // Speed in pixels per frame
-    
-    const scroll = (): void => {
-      if (!scrollContainer) return;
-      
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
-      
-      // Change direction at the edges
-      if (scrollLeft <= 0) {
-        setScrollDirection('right');
-      } else if (scrollLeft >= scrollWidth - clientWidth) {
-        setScrollDirection('left');
-      }
-      
-      // Apply scrolling based on direction
-      if (scrollDirection === 'left') {
-        scrollContainer.scrollLeft -= scrollSpeed;
-      } else {
-        scrollContainer.scrollLeft += scrollSpeed;
-      }
-      
-      // Update indicators based on current scroll position
-      updateScrollIndicators();
-      
-      animationFrameId = requestAnimationFrame(scroll);
-    };
-    
-    animationFrameId = requestAnimationFrame(scroll);
-    
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [scrollDirection, isScrolling]);
-
   // Add event listener for scroll events to update indicators
   useEffect(() => {
     const scrollContainer = footerNavRef.current;
@@ -124,15 +82,6 @@ const Sidebar = () => {
     };
   }, []);
 
-  // Function to pause/resume scrolling when touched
-  const handleTouchStart = (): void => {
-    setIsScrolling(false);
-  };
-  
-  const handleTouchEnd = (): void => {
-    setIsScrolling(true);
-  };
-
   const toggleSidebar = (): void => {
     setCollapsed(!collapsed);
   };
@@ -148,10 +97,6 @@ const Sidebar = () => {
       left: direction === 'left' ? currentScroll - scrollAmount : currentScroll + scrollAmount,
       behavior: 'smooth'
     });
-    
-    // Temporarily pause auto-scrolling
-    setIsScrolling(false);
-    setTimeout(() => setIsScrolling(true), 1000);
   };
 
   // Render a placeholder during server-side rendering
@@ -177,7 +122,7 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* Mobile/Tablet Footer Navigation Bar - Auto-scrolling */}
+      {/* Mobile/Tablet Footer Navigation Bar - Manual scrolling only */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t z-40">
         <div className="relative">
           {/* Left scroll indicator */}
@@ -206,9 +151,7 @@ const Sidebar = () => {
 
           <div 
             ref={footerNavRef} 
-            className="overflow-x-auto scrollbar-hide" 
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
+            className="overflow-x-auto scrollbar-hide"
           >
             <div className="flex items-center px-2 py-2 gap-4" style={{ minWidth: "max-content" }}>
               {navItems.map((item) => (
@@ -228,21 +171,6 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-          
-          {/* Optional: Dots indicator for number of items
-          <div className="flex justify-center py-1 gap-1">
-            {navItems.map((item, index) => (
-              <div
-                key={`dot-${item.href}`}
-                className={cn(
-                  "w-1.5 h-1.5 rounded-full",
-                  pathname === item.href 
-                    ? "bg-primary" 
-                    : "bg-gray-300 dark:bg-gray-600"
-                )}
-              />
-            ))}
-          </div> */}
         </div>
       </div>
 
