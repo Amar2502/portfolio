@@ -28,10 +28,6 @@ export default function AboutPage() {
         "Developed a code and website sharing platform with a single shareable url, using Next.js and MongoDB",
     },
     {
-      title: "Quiz App",
-      description: "Developed a quiz application using RapidAPI and React",
-    },
-    {
       title: "Library Management System",
       description: "Developed a library management system using MERN",
     },
@@ -39,15 +35,19 @@ export default function AboutPage() {
       title: "Portfolio Website",
       description: "Designed and developed my personal portfolio",
     },
+    {
+      title: "Quiz App",
+      description: "Developed a quiz application using RapidAPI and React",
+    }
   ];
 
   const educationDetails = [
     {
       degree: "BTech in Computer Engineering",
-      institution: "Dr. BabaSaheb Ambedkar Technological University",
+      institution: "Dr. Babasaheb Ambedkar Technological University",
       period: "2023 - 2027",
       description:
-        "Focused on software development, data structures, and algorithms, Computer Networks and Database Management.",
+        "Focusing on software development, data structures, and algorithms, Computer Networks and Database Management.",
     },
     {
       degree: "Higher Secondary Education",

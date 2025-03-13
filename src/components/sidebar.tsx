@@ -7,15 +7,26 @@ import {
   Home, User, Briefcase, Code, Mail, 
   Moon, Sun, 
   Newspaper, ChevronLeft, ChevronRight,
-  LucideMessageCircle
+  LucideMessageCircle, 
+  LucideIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-const navItems = [
+// Define types for navigation items
+interface NavItem {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+}
+
+// Define scroll direction type
+type ScrollDirection = 'left' | 'right';
+
+const navItems: NavItem[] = [
   { name: "Home", href: "/", icon: Home },
   { name: "About", href: "/about", icon: User },
   { name: "Projects", href: "/projects", icon: Briefcase },
@@ -25,18 +36,67 @@ const navItems = [
   { name: "Connect", href: "/connect", icon: LucideMessageCircle },
 ];
 
-export function Sidebar() {
+const Sidebar = () => {
   const pathname = usePathname();
   const { setTheme, theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const footerNavRef = useRef<HTMLDivElement | null>(null);
+  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>('left');
+  const [isScrolling, setIsScrolling] = useState<boolean>(true);
 
   // Use this effect to handle theme-related rendering
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const toggleSidebar = () => {
+  // Auto-scrolling effect for footer navigation
+  useEffect(() => {
+    if (!footerNavRef.current || !isScrolling) return;
+    
+    const scrollContainer = footerNavRef.current;
+    let animationFrameId: number;
+    const scrollSpeed = 0.5; // Speed in pixels per frame
+    
+    const scroll = (): void => {
+      if (!scrollContainer) return;
+      
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
+      
+      // Change direction at the edges
+      if (scrollLeft <= 0) {
+        setScrollDirection('right');
+      } else if (scrollLeft >= scrollWidth - clientWidth) {
+        setScrollDirection('left');
+      }
+      
+      // Apply scrolling based on direction
+      if (scrollDirection === 'left') {
+        scrollContainer.scrollLeft -= scrollSpeed;
+      } else {
+        scrollContainer.scrollLeft += scrollSpeed;
+      }
+      
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+    
+    animationFrameId = requestAnimationFrame(scroll);
+    
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [scrollDirection, isScrolling]);
+
+  // Function to pause/resume scrolling when touched
+  const handleTouchStart = (): void => {
+    setIsScrolling(false);
+  };
+  
+  const handleTouchEnd = (): void => {
+    setIsScrolling(true);
+  };
+
+  const toggleSidebar = (): void => {
     setCollapsed(!collapsed);
   };
 
@@ -63,10 +123,15 @@ export function Sidebar() {
         )}
       </div>
 
-      {/* Mobile/Tablet Footer Navigation Bar */}
+      {/* Mobile/Tablet Footer Navigation Bar - Auto-scrolling */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t z-40">
-        <div className="overflow-x-auto">
-          <div className="flex items-center justify-between px-2 py-2 gap-4">
+        <div 
+          ref={footerNavRef} 
+          className="overflow-x-auto scrollbar-hide" 
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="flex items-center px-2 py-2 gap-4" style={{ minWidth: "max-content" }}>
             {navItems.map((item) => (
               <Link href={item.href} key={item.href} className="flex-shrink-0">
                 <div
@@ -166,3 +231,5 @@ export function Sidebar() {
     </>
   );
 }
+
+export default Sidebar;

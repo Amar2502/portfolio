@@ -19,7 +19,7 @@ const projects = [
     description:
       "A comprehensive library management solution with features for book tracking, user management, admin dashboard, and more.",
     tags: [
-      "React.js",
+      "React",
       "JavaScript",
       "Node.js",
       "Express.js",

@@ -52,7 +52,7 @@ export default function BlogPostDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center text-gray-700 dark:text-gray-300">
           Loading...
         </div>
@@ -62,7 +62,7 @@ export default function BlogPostDetail() {
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center text-red-500 dark:text-red-400">
           {error || "Blog post not found"}
         </div>
@@ -70,76 +70,85 @@ export default function BlogPostDetail() {
     );
   }
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `🚀 Check out this blog: ${post.title}`,
+          text: `${post.excerpt}\n\n🔗 Read more here:`,
+          url: window.location.href,
+        });
+      } catch (err) {
+        if (err instanceof Error && err.name !== "AbortError") {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      navigator.clipboard.writeText(
+        `🚀 Check out this blog: ${post.title}\n\n${post.excerpt}\n🔗 Read more here: ${window.location.href}`
+      );
+      alert("Link copied to clipboard!");
+    }
+  };
+
   return (
-    <article className="max-w-6xl mx-auto p-1 border-2 bg-gray-100 dark:bg-background rounded-lg shadow-lg overflow-hidden">
+    <article className="w-full max-w-6xl mx-auto p-2 sm:p-4 bg-gray-100 dark:bg-background rounded-lg shadow-lg overflow-hidden">
       {post.coverImage && (
-        <Image
-          src={post.coverImage}
-          alt={post.title}
-          className="w-full object-cover rounded-md"
-        />
+        <div className="relative w-full aspect-video mb-4">
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 50vw"
+            className="object-cover rounded-md"
+            priority
+          />
+        </div>
       )}
-      <div className="p-6 sm:p-8">
+      
+      <div className="px-3 py-4 sm:p-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-end">
+          <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
             {post.date}
           </div>
 
-          <div className="flex justify-between">
-            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-              {post.title}
-            </h1>
-            <div className="mt-6 flex">
-              <button
-                onClick={async () => {
-                  if (navigator.share) {
-                    try {
-                      await navigator.share({
-                        title: `🚀 Check out this blog: ${post.title}`,
-                        text: `${post.excerpt}\n\n🔗 Read more here:`,
-                        url: window.location.href,
-                      });
-                    } catch (err) {
-                      if (err instanceof Error && err.name !== "AbortError") {
-                        console.error("Error sharing:", err);
-                      }
-                    }
-                  } else {
-                    navigator.clipboard.writeText(
-                      `🚀 Check out this blog: ${post.title}\n\n${post.excerpt}\n🔗 Read more here: ${window.location.href}`
-                    );
-                    alert("Link copied to clipboard!");
-                  }
-                }}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 cursor-pointer"
-              >
-                Share
-              </button>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-2 mb-6">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            {post.title}
+          </h1>
+          
+          <div className="flex flex-wrap gap-2 mb-4">
             {post.tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm"
+                className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs"
               >
                 {tag}
               </span>
             ))}
           </div>
+          
+          <button
+            onClick={handleShare}
+            aria-label="Share this post"
+            className="mb-6 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 text-sm w-full sm:w-auto"
+          >
+            Share this post
+          </button>
+          
           <div
-            className="prose dark:prose-invert max-w-none"
+            className="prose prose-sm sm:prose dark:prose-invert max-w-none overflow-hidden"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </motion.div>
+        
         <div className="mt-8 text-center">
           <Link
             href="/blogs"
-            className="text-blue-600 dark:text-blue-400 hover:underline"
+            className="text-blue-600 dark:text-blue-400 hover:underline inline-block py-2 px-4"
           >
             ← Back to all posts
           </Link>

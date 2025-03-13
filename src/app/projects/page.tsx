@@ -21,7 +21,7 @@ interface Project {
 }
 
 export default function ProjectsPage() {
-  const categories = ["All", "Next.js", "React", "Node.js", "Tailwind CSS"];
+  const categories = ["All", "Next.js", "React", "Node.js"];
   const [activeCategory, setActiveCategory] = useState("All");
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -80,6 +80,7 @@ export default function ProjectsPage() {
             <Button
               key={category}
               variant={activeCategory === category ? "default" : "outline"}
+              className="cursor-pointer"
               size="sm"
               onClick={() => setActiveCategory(category)}
             >
