@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, } from "@/components/ui/card";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 // Define TypeScript interfaces
 interface BlogPost {
@@ -60,7 +61,7 @@ export default function BlogPage() {
       </motion.div>
 
       {loading ? (
-        <div className="text-center">Loading...</div>
+        <LoadingAnimation/>
       ) : error ? (
         <div className="text-center text-red-500">{error}</div>
       ) : posts.length > 0 ? (

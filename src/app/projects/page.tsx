@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 // Define the Project type
 interface Project {
@@ -53,11 +54,7 @@ export default function ProjectsPage() {
         );
 
   if (loading) {
-    return (
-      <div className="max-w-5xl mx-auto flex justify-center items-center min-h-[60vh]">
-        <p className="text-lg">Loading projects...</p>
-      </div>
-    );
+    <LoadingAnimation/>
   }
 
   return (
