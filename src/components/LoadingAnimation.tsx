@@ -1,7 +1,7 @@
 // components/LoadingAnimation.tsx
 "use client";
 
-import { motion, Variant, Variants } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 export default function LoadingAnimation() {
   // Logo/letter animation variants

@@ -4,6 +4,7 @@ import Sidebar from "@/components/sidebar";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/react"
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             </main>
           </div>
           <Toaster />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
