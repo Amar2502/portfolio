@@ -14,7 +14,7 @@ interface BlogPost {
   date: string;
 }
 
-export default function BlogPost() {
+export default function BlogPostDetail() {
   const params = useParams();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
@@ -50,7 +50,7 @@ export default function BlogPost() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20">
+      <div className="min-h-screen bg-gray-50 dark:bg-background py-20">
         <div className="container mx-auto px-4">
           <div className="text-center text-gray-600 dark:text-gray-400">
             Loading...
@@ -62,7 +62,7 @@ export default function BlogPost() {
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20">
+      <div className="min-h-screen bg-gray-50 dark:bg-background py-20">
         <div className="container mx-auto px-4">
           <div className="text-center text-red-600 dark:text-red-400">
             {error || "Blog post not found"}
@@ -73,14 +73,14 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-20">
-      <article className="container mx-auto px-4 max-w-4xl">
+    <div className="min-h-screen bg-gray-50 dark:bg-background py-20">
+      <article className="container mx-auto px-4 max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
             <div className="p-8">
               <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                 {post.date}
@@ -149,7 +149,7 @@ export default function BlogPost() {
           </div>
           <div className="mt-8 text-center">
             <Link
-              href="/blog"
+              href="/blogs"
               className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline"
             >
               ← Back to all posts

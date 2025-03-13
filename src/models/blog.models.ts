@@ -4,6 +4,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 interface IBlog extends Document {
   title: string;
   content: string;
+  coverImage: string;
   excerpt: string;
   tags: string[];
   date: Date;
@@ -15,6 +16,7 @@ const BlogSchema: Schema = new Schema<IBlog>(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
+    coverImage: { type: String},
     excerpt: { type: String, required: true },
     tags: { type: [String], required: true },
     date: { type: Date, default: Date.now },

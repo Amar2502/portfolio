@@ -41,28 +41,3 @@ export async function GET(req: Request) {
     }, { status: 500 });
   }
 }
-
-export async function POST(req: Request) {
-  console.time('blogCreate');
-  try {
-    await dbConnect();
-    const { title, content, excerpt, tags } = await req.json();
-
-    if (!title || !content || !excerpt || !tags) {
-      return NextResponse.json({ message: "All fields are required" }, { status: 400 });
-    }
-
-    const newBlog = new BlogModel({ title, content, excerpt, tags });
-    await newBlog.save();
-
-    console.timeEnd('blogCreate');
-    return NextResponse.json({ message: "Blog created successfully", blog: newBlog }, { status: 201 });
-  } catch (error) {
-    console.error('Blog Create Error:', error);
-    console.timeEnd('blogCreate');
-    return NextResponse.json({ 
-      message: "Error creating blog", 
-      errorDetails: error instanceof Error ? error.message : 'Unknown error' 
-    }, { status: 500 });
-  }
-}
