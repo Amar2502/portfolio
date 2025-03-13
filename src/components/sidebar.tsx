@@ -23,9 +23,6 @@ interface NavItem {
   icon: LucideIcon;
 }
 
-// Define scroll direction type
-type ScrollDirection = 'left' | 'right';
-
 const navItems: NavItem[] = [
   { name: "Home", href: "/", icon: Home },
   { name: "About", href: "/about", icon: User },
