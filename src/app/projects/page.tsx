@@ -66,10 +66,13 @@ export default function ProjectsPage() {
         className="mb-10"
       >
         <h1 className="text-4xl font-bold mb-4">My Projects</h1>
+        {/* eslint-disable react/no-unescaped-entities */}
         <p className="text-lg text-muted-foreground mb-8">
           A collection of my recent work, showcasing various skills and technologies.
           Each project demonstrates different aspects of my development capabilities.
         </p>
+        {/* eslint-enable react/no-unescaped-entities */}
+
 
         <div className="flex flex-wrap gap-2 mb-8">
           {categories.map((category) => (
