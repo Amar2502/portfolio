@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Github, Linkedin, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 const XIcon = () => (
   <svg
@@ -51,7 +50,6 @@ const WhatsAppIcon = () => (
 );
 
 export default function ConnectWithMe() {
-  const [showQR, setShowQR] = useState(false);
 
   const socialLinks = [
     { name: "GitHub", icon: Github, url: "https://github.com/amar2502" },
