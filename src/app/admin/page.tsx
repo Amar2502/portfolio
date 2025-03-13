@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { Loader2, ImagePlus, Bold, Italic, List, ListOrdered, Quote, Code, Underline as UnderlineIcon, Strikethrough } from "lucide-react";
+import { Loader2, ImagePlus, Bold, Italic, List, ListOrdered, Quote, Code, Strikethrough } from "lucide-react";
 import ImageComponent from "next/image";
 import { toast } from "sonner";
 

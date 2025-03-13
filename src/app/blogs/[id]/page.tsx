@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface BlogPost {
   _id: string;
@@ -72,7 +73,7 @@ export default function BlogPostDetail() {
   return (
     <article className="max-w-6xl mx-auto p-1 border-2 bg-gray-100 dark:bg-background rounded-lg shadow-lg overflow-hidden">
       {post.coverImage && (
-        <img
+        <Image
           src={post.coverImage}
           alt={post.title}
           className="w-full object-cover rounded-md"

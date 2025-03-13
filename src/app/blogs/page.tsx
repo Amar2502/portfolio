@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Calendar, Clock, BookOpen } from "lucide-react";
+  import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 
 // Define TypeScript interfaces
 interface BlogPost {
@@ -24,6 +22,7 @@ export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loadingProgress, setLoadingProgress] = useState(0);
 
   useEffect(() => {
