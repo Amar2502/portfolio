@@ -142,7 +142,7 @@ export default function BlogPage() {
     }, 500); // 500ms delay
     
     return () => clearTimeout(timer);
-  }, [searchTerm]);
+  }, []);
 
   // Use client-side filtering for quicker response when both tag and search are applied
   const filteredPosts = useMemo(() => {
@@ -272,7 +272,7 @@ export default function BlogPage() {
           <CardTitle className="flex items-center gap-2">
             <Search className="h-5 w-5" /> Search & Filter
           </CardTitle>
-          <CardDescription>Find exactly what you're looking for</CardDescription>
+          <CardDescription>Find exactly what you&apos;re looking for</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-4">

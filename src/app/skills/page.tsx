@@ -91,8 +91,8 @@ export default function SkillsPage() {
       >
         <h1 className="text-4xl font-bold mb-4">My Skills</h1>
         <p className="text-lg text-muted-foreground">
-          I've worked with a variety of technologies and tools throughout my career.
-          Here's a comprehensive overview of my technical skillset.
+          I&apos;ve worked with a variety of technologies and tools throughout my career.
+          Here&apos;s a comprehensive overview of my technical skillset.
         </p>
       </motion.div>
 

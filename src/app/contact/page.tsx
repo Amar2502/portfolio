@@ -138,7 +138,7 @@ export default function ContactPage() {
                 <MessageSquare className="h-5 w-5" /> Send a Message
               </CardTitle>
               <CardDescription>
-                Fill out the form below and I'll get back to you as soon as possible.
+                Fill out the form below and I&apos;ll get back to you as soon as possible.
               </CardDescription>
             </CardHeader>
             <CardContent>

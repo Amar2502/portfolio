@@ -16,7 +16,7 @@ export default function HomePage() {
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-primary">Hi, I'm</span> <br />
+            <span className="text-primary">Hi, I&apos;m</span> <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-500">
               Amar Pandey
             </span>
