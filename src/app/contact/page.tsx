@@ -150,7 +150,7 @@ export default function ContactPage() {
                 >
                   <Alert className="bg-green-50 border-green-200">
                     <AlertDescription className="text-green-800">
-                      Thank you for your message! I'll get back to you shortly.
+                      Thank you for your message! I&apos;ll get back to you shortly.
                     </AlertDescription>
                   </Alert>
                   <Button onClick={() => setFormStatus("idle")} variant="outline">

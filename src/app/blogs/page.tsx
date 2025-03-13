@@ -103,7 +103,7 @@ export default function BlogPage() {
     }
 
     fetchPosts();
-  }, [selectedTag, sortOrder]);
+  }, [selectedTag, sortOrder, searchTerm]);
 
   // Use debounce for search term to prevent excessive API calls
   useEffect(() => {
@@ -142,7 +142,7 @@ export default function BlogPage() {
     }, 500); // 500ms delay
     
     return () => clearTimeout(timer);
-  }, []);
+  }, [searchTerm]);
 
   // Use client-side filtering for quicker response when both tag and search are applied
   const filteredPosts = useMemo(() => {
