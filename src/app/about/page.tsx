@@ -83,23 +83,21 @@ export default function AboutPage() {
         <h1 className="text-4xl font-bold mb-6">About Me</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
-            {/* eslint-disable react/no-unescaped-entities */}
             <p className="text-lg mb-4">
-              Hello! I'm Amar, an aspiring developer with a passion for creating
+              Hello! I&apos;m Amar, an aspiring developer with a passion for creating
               intuitive and engaging web experiences.
             </p>
             <p className="text-lg mb-4">
-              I'm currently exploring the world of web development and
-              constantly learning new technologies. While I'm early in my
-              journey, I'm enthusiastic about building my skills and taking on
+              I&apos;m currently exploring the world of web development and
+              constantly learning new technologies. While I&apos;m early in my
+              journey, I&apos;m enthusiastic about building my skills and taking on
               new challenges.
             </p>
             <p className="text-lg mb-6">
               I believe in writing clean, readable code and focusing on
-              user-centered design. I'm excited to grow my portfolio and
+              user-centered design. I&apos;m excited to grow my portfolio and
               contribute to meaningful projects.
             </p>
-            {/* eslint-enable react/no-unescaped-entities */}
 
             <div className="flex gap-4 mb-8">
               <Button asChild>
@@ -256,11 +254,10 @@ export default function AboutPage() {
         animate="show"
         className="py-8 border-t"
       >
-        <h2 className="text-2xl font-semibold mb-6">What I'm Learning</h2>
+        <h2 className="text-2xl font-semibold mb-6">What I&apos;m Learning</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-card border rounded-lg p-6">
             <h3 className="text-lg font-medium mb-2">Technical Skills</h3>
-            {/* eslint-disable react/no-unescaped-entities */}
             <ul className="space-y-1 text-muted-foreground">
               <li>• React, Next.js, and TypeScript</li>
               <li>• Tailwind CSS and ShadCN UI</li>
@@ -268,13 +265,11 @@ export default function AboutPage() {
               <li>• Full-stack development with MongoDB</li>
               <li>• Data Structures & Algorithms (C++)</li>
             </ul>
-            {/* eslint-enable react/no-unescaped-entities */}
 
           </div>
 
           <div className="bg-card border rounded-lg p-6">
             <h3 className="text-lg font-medium mb-2">Personal Development</h3>
-            {/* eslint-disable react/no-unescaped-entities */}
             <ul className="space-y-1 text-muted-foreground">
               <li>• Problem-solving approaches</li>
               <li>• Time management</li>
@@ -282,7 +277,6 @@ export default function AboutPage() {
               <li>• Continuous learning habits</li>
               <li>• Passion for innovation and cutting-edge tech</li>
             </ul>
-            {/* eslint-enable react/no-unescaped-entities */}
 
           </div>
         </div>
