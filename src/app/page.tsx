@@ -105,7 +105,7 @@ export default function HomePage() {
         <div className="flex gap-4">
           <Button variant="outline" size="icon" asChild>
             <Link
-              href="https://github.com"
+              href="https://github.com/amar2502"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -114,7 +114,7 @@ export default function HomePage() {
           </Button>
           <Button variant="outline" size="icon" asChild>
             <Link
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/amar-pandey-486ab6337/"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -123,11 +123,18 @@ export default function HomePage() {
           </Button>
           <Button variant="outline" size="icon" asChild>
             <Link
-              href="https://twitter.com"
+              href="https://x.com/amarpandey2502"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Twitter className="h-5 w-5" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-5 h-5"
+              >
+                <path d="M17.7 3H21l-7.5 8.6L22 21h-6.4l-4.8-6.1L5 21H1.3l8-9.2L2 3h6.5l4.3 5.5L17.7 3zM16 19h2.1L7.3 5H5.1l10.9 14z" />
+              </svg>
             </Link>
           </Button>
         </div>
