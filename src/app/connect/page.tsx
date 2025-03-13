@@ -71,6 +71,11 @@ export default function ConnectWithMe() {
       icon: PeerlistIcon,
       url: "https://peerlist.io/amar2502",
     },
+    {
+      name: "Whatsapp",
+      icon: WhatsAppIcon,
+      url: "https://wa.me/qr/T3HUCVOZBRPQD1",
+    },
   ];
 
   return (
@@ -106,42 +111,7 @@ export default function ConnectWithMe() {
             <span className="text-sm font-medium">{link.name}</span>
           </motion.a>
         ))}
-
-        {/* WhatsApp Button - Opens QR Code Modal */}
-        <motion.button
-          onClick={() => setShowQR(true)}
-          className="flex flex-col items-center gap-2 p-4 border rounded-lg bg-card shadow-md cursor-pointer hover:bg-primary hover:text-black transition"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <WhatsAppIcon />
-          <span className="text-sm font-medium">WhatsApp</span>
-        </motion.button>
       </div>
-
-      {/* QR Code Modal */}
-      {showQR && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300">
-          <div className="bg-black p-8 rounded-lg shadow-lg text-center border border-gray-700 relative">
-            <h3 className="text-lg font-semibold mb-4 text-white">
-              Scan to Chat on WhatsApp
-            </h3>
-            <Image
-              src="/Whatsapp.png"
-              alt="WhatsApp QR Code"
-              width={192}
-              height={192}
-              className="w-48 h-48 mx-auto rounded-lg border border-gray-600"
-            />
-            <button
-              onClick={() => setShowQR(false)}
-              className="absolute top-3 right-3 text-red-600 hover:text-red-700 transition cursor-pointer"
-            >
-              ✖
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
