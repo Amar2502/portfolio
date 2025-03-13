@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import {  Github, Linkedin, Instagram } from "lucide-react";
+import { Github, Linkedin, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
-import Link from "next/link";
+import Image from "next/image";
 
 const XIcon = () => (
   <svg
@@ -126,9 +126,11 @@ export default function ConnectWithMe() {
             <h3 className="text-lg font-semibold mb-4 text-white">
               Scan to Chat on WhatsApp
             </h3>
-            <img
+            <Image
               src="/Whatsapp.png"
               alt="WhatsApp QR Code"
+              width={192}
+              height={192}
               className="w-48 h-48 mx-auto rounded-lg border border-gray-600"
             />
             <button

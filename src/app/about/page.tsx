@@ -10,7 +10,6 @@ import {
   Download,
   Lightbulb,
   GraduationCap,
-  User,
   Database,
 } from "lucide-react";
 import Image from "next/image";

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, Search, ArrowUpDown, Tag, User, BookOpen } from "lucide-react";
+import { Calendar, Clock, Search, ArrowUpDown, BookOpen } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -388,7 +388,7 @@ export default function BlogPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPosts.slice(1).map((post, index) => (
               <motion.div
-                key={post._id}
+                key={post._id || index}
                 variants={item}
                 whileHover={{ y: -5 }}
                 transition={{ duration: 0.3 }}

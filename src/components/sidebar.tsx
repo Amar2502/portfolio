@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { 
   Home, User, Briefcase, Code, Mail, 
   Moon, Sun, 
-  Newspaper, X, ChevronLeft, ChevronRight,
+  Newspaper, ChevronLeft, ChevronRight,
   LucideMessageCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

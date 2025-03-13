@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 // Define the Project type
 interface Project {
@@ -95,7 +96,7 @@ export default function ProjectsPage() {
             className="border rounded-lg overflow-hidden bg-card shadow-sm"
           >
             <div className="relative h-48 bg-muted">
-              <img 
+              <Image
                 src={project.image} 
                 alt={project.title} 
                 className="w-full h-full object-cover"
