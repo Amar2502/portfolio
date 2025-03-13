@@ -3,6 +3,7 @@ import React from "react";
 import { Sidebar } from "@/components/sidebar";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               </div>
             </main>
           </div>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

@@ -30,7 +30,7 @@ export default function ProjectsPage() {
     // Fetch projects from API
     const fetchProjects = async () => {
       try {
-        const response = await fetch('/api/projects');
+        const response = await fetch("/api/projects");
         const data = await response.json();
         setProjects(data);
       } catch (error) {
@@ -43,11 +43,14 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  const filteredProjects = activeCategory === "All" 
-    ? projects 
-    : projects.filter(project => 
-        project.tags.some(tag => tag.toLowerCase() === activeCategory.toLowerCase())
-      );
+  const filteredProjects =
+    activeCategory === "All"
+      ? projects
+      : projects.filter((project) =>
+          project.tags.some(
+            (tag) => tag.toLowerCase() === activeCategory.toLowerCase()
+          )
+        );
 
   if (loading) {
     return (
@@ -67,10 +70,10 @@ export default function ProjectsPage() {
       >
         <h1 className="text-4xl font-bold mb-4">My Projects</h1>
         <p className="text-lg text-muted-foreground mb-8">
-          A collection of my recent work, showcasing various skills and technologies.
-          Each project demonstrates different aspects of my development capabilities.
+          A collection of my recent work, showcasing various skills and
+          technologies. Each project demonstrates different aspects of my
+          development capabilities.
         </p>
-
 
         <div className="flex flex-wrap gap-2 mb-8">
           {categories.map((category) => (
@@ -98,35 +101,49 @@ export default function ProjectsPage() {
           >
             <div className="relative h-48 bg-muted">
               <Image
-                src={project.image} 
-                alt={project.title} 
-                className="w-full h-full object-cover"
+                src={project.image}
+                alt={project.title}
+                layout="fill"
+                objectFit="cover"
               />
             </div>
+
             <div className="p-6">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-xl font-semibold">{project.title}</h3>
                 <Badge variant="outline">
-                  {new Date(project.date).toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'short' 
+                  {new Date(project.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
                   })}
                 </Badge>
               </div>
-              <p className="text-muted-foreground mb-4">{project.description}</p>
+              <p className="text-muted-foreground mb-4">
+                {project.description}
+              </p>
               <div className="flex flex-wrap gap-2 mb-6">
                 {project.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">{tag}</Badge>
+                  <Badge key={tag} variant="secondary">
+                    {tag}
+                  </Badge>
                 ))}
               </div>
               <div className="flex gap-3">
                 <Button size="sm" asChild>
-                  <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                  <Link
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <ExternalLink className="h-4 w-4 mr-2" /> Live Demo
                   </Link>
                 </Button>
                 <Button size="sm" variant="outline" asChild>
-                  <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                  <Link
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Github className="h-4 w-4 mr-2" /> Code
                   </Link>
                 </Button>
