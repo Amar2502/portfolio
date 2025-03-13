@@ -99,7 +99,7 @@ export default function SkillsPage() {
       <Tabs defaultValue="frontend" className="mb-12">
         <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-8">
           {categories.map((category) => (
-            <TabsTrigger key={category.id} value={category.id} className="flex items-center gap-2">
+            <TabsTrigger key={category.id} value={category.id} className="flex items-center gap-2 cursor-pointer">
               <category.icon className="h-4 w-4" />
               {category.title}
             </TabsTrigger>

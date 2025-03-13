@@ -84,14 +84,14 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2">
             <p className="text-lg mb-4">
-              Hello! I&apos;m Amar, an aspiring developer with a passion for creating
-              intuitive and engaging web experiences.
+              Hello! I&apos;m Amar, an aspiring developer with a passion for
+              creating intuitive and engaging web experiences.
             </p>
             <p className="text-lg mb-4">
               I&apos;m currently exploring the world of web development and
               constantly learning new technologies. While I&apos;m early in my
-              journey, I&apos;m enthusiastic about building my skills and taking on
-              new challenges.
+              journey, I&apos;m enthusiastic about building my skills and taking
+              on new challenges.
             </p>
             <p className="text-lg mb-6">
               I believe in writing clean, readable code and focusing on
@@ -104,8 +104,14 @@ export default function AboutPage() {
                 <Link href="/contact">Contact Me</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/resume.pdf" download>
-                  <Download className="mr-2 h-4 w-4" /> Download Resume
+                <Link href="/resume.pdf" download legacyBehavior passHref>
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center hover:bg-zinc-800 p-1 rounded-lg"
+                  >
+                    <Download className="mr-2 h-4 w-4" /> Download Resume
+                  </a>
                 </Link>
               </Button>
             </div>
@@ -265,7 +271,6 @@ export default function AboutPage() {
               <li>• Full-stack development with MongoDB</li>
               <li>• Data Structures & Algorithms (C++)</li>
             </ul>
-
           </div>
 
           <div className="bg-card border rounded-lg p-6">
@@ -277,7 +282,6 @@ export default function AboutPage() {
               <li>• Continuous learning habits</li>
               <li>• Passion for innovation and cutting-edge tech</li>
             </ul>
-
           </div>
         </div>
       </motion.section>

@@ -7,11 +7,11 @@ const projects = [
     title: "CodeShare",
     description:
       "A real-time code sharing platform with syntax highlighting and website sharing feature with just a single click without any hosting knowledge required.",
-    tags: ["Nextjs", "React", "MongoDB", "Tailwindcss", "Shadcn"],
+    tags: ["Next.js", "React", "MongoDB", "Tailwindcss", "Shadcn"],
     githubUrl: "https://github.com/Amar2502/codeshare",
     liveUrl: "https://codeshare.space",
     image: "/codeshare.png",
-    date: '2024-01-15',
+    date: '2024-02-28',
   },
   {
     id: '2',
