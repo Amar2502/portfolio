@@ -19,7 +19,7 @@ export const metadata = {
     title: "Amar Pandey | Full Stack Developer Portfolio",
     description: "Showcasing my skills, projects, and professional journey as a full stack developer",
     url: "https://amarpandey.in",
-    siteName: "JAmar Pandey Portfolio",
+    siteName: "Amar Pandey Portfolio",
     images: [
       {
         url: "/portfolio.png",
