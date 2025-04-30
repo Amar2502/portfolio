@@ -52,6 +52,7 @@ export default function SkillsPage() {
       skills: [
         { name: "MongoDB", level: 90 },
         { name: "Firebase", level: 80 },
+        { name: "SQL", level: 65 },
       ],
     },
     {

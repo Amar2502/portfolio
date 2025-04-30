@@ -108,7 +108,7 @@ export default function AboutPage() {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center hover:bg-zinc-800 p-1 rounded-lg"
+                    className="flex items-center hover:bg-zinc-800 hover:text-amber-50 p-1 rounded-lg "
                   >
                     <Download className="mr-2 h-4 w-4" /> Download Resume
                   </a>

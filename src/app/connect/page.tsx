@@ -100,7 +100,7 @@ export default function ConnectWithMe() {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center gap-2 p-4 border rounded-lg bg-card shadow-md hover:bg-primary hover:text-black transition"
+            className="flex flex-col items-center gap-2 p-4 border rounded-lg bg-card shadow-md hover:bg-primary hover:text-white transition"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
